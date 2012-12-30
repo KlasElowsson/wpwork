@@ -1,6 +1,7 @@
 <?php
 
 // Add new post type for Recipes
+// Test av spårbarhet
 add_action('init', 'cooking_recipes_init');
 function cooking_recipes_init() 
 {

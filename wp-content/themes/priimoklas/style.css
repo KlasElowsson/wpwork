@@ -1,0 +1,17 @@
+/* Imports all styles from priimo stylesheets */
+@import url('../priimo/style.css');
+/*
+Theme Name: Klas Priimo Theme
+Theme URI: URI to your theme
+Description: Priimo child-theme with seriously good looks
+Author: Klas Elowsson
+Version: 0.0.1
+Template: priimo
+Tags:light, white, one-column, two-columns, left-sidebar, right-sidebar, fixed-width, custom-background, custom-header, custom-colors, custom-menu, editor-style, featured-images, full-width-template, post-formats, theme-options, translation-ready
+*/
+/* CLEAR FIX */
+
+
+/* END CLEAR FIX */
+
+

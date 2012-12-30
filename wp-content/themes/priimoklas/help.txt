@@ -1,0 +1,1 @@
+Defaultbilden utbytt i theme priimo för att man ska få annan lämplig bild

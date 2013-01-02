@@ -13,4 +13,4 @@ sitemap.xml
 wp-content/cache/
 wp-content/backups/
 sitemap.xml.gz
-.settings/
+phpinfo.php

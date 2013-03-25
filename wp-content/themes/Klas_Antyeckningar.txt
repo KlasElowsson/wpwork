@@ -1,0 +1,8 @@
+Hämtar alla templates ..
+
+<?php $templates = get_page_templates(); ?>
+
+För att includera template-file:
+<?php get_query_template( $type, $templates ); ?> 
+var $type är den fil du letar efter men om ej finns så finns en candidatslista i turordning i $templates
+

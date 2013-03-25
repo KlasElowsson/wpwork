@@ -1,0 +1,181 @@
+/* Imports all styles from the Twentyeleven stylesheet */
+@import url('../twentyeleven/style.css');
+/*
+Theme Name: Klas 2011 Theme
+Theme URI: URI to your theme
+Description: Twentyten child-theme with seriously good looks
+Author: Klas Elowsson
+Version: 0.0.1
+Template: twentyeleven
+Tags: two-columns, right-sidebar, custom-header, custom-colors, custom-background, custom-menu, theme-options, threaded-comments, sticky-post, translation-ready, microformats, rtl-language-support, editor-style
+*/
+/* CLEAR FIX */
+
+
+/* END CLEAR FIX */
+
+
+/* För att få bakgrundsbilden på plats */
+img.bg {
+	/* Set rules to fill background */
+	min-height: 100%;
+	min-width: 1024px;
+	
+	/* Set up proportionate scaling */
+	width: 100%;
+	height: auto;
+	
+	/* Set up positioning */
+	position: fixed;
+	top: 0;
+	left: 0;
+}
+
+@media screen and (max-width: 1024px) { /* Specific to this particular image */
+	img.bg {
+		left: 50%;
+		margin-left: -512px;   /* 50% */
+	}
+}
+/* SLUT: För att få bakgrundsbilden på plats */
+ul {
+	padding-left:20;
+}
+
+#access {
+    position: fixed;
+    max-width: 100%;
+    top: 20px;    
+    left: 0px;
+}
+
+#branding {
+	border-top: 0;
+}
+#branding hgroup {
+    margin: 0 7.6%;
+    position: absolute;
+    top: 40px;
+}
+#site-title {
+    padding: 0.65625em 0 0;
+}
+#main {
+    padding: 0;
+}
+.hentry, .no-results {
+    border-bottom: 0 solid #DDDDDD;
+	padding-left: 10px;
+    padding-right: 10px;
+}
+
+article, #respond, #comments  {
+	-webkit-border-radius: 8px;
+	-moz-border-radius: 8px;
+	border-radius: 8px;
+	-webkit-box-shadow: 15px 15px 43px #000000;
+	-moz-box-shadow: 15px 15px 43px #000000;
+	box-shadow: 15px 15px 43px #000000;
+	/*text-shadow: -2px -2px 0px #E6E6FA;*/
+	background-image: -moz-linear-gradient(top, #C0C0C0, #FFFFFF);
+	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0.00, #C0C0C0), color-stop(1.0, #FFFFFF));
+	background-color: #DDDDDD;
+
+	z-index: 8;
+	opacity: 1.0;
+	outline: 0px solid #000000;	
+}
+.post {
+	padding-bottom: 15px;
+	margin-bottom: 10px;
+}
+article:hover, #comments:hover {
+	opacity: 1;
+}
+
+aside.widget {
+	-webkit-border-radius: 8px;
+	-moz-border-radius: 8px;
+	border-radius: 8px;
+	-webkit-box-shadow: 15px 15px 43px #000000;
+	-moz-box-shadow: 15px 15px 43px #000000;
+	box-shadow: 15px 15px 43px #000000;
+	/*text-shadow: -2px -2px 0px #E6E6FA;*/
+	background-image: -moz-linear-gradient(top, #C0C0C0, #FFFFFF);
+	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0.00, #C0C0C0), color-stop(1.0, #FFFFFF));
+	background-color: #DDDDDD;
+	z-index: 8;
+	opacity: 1.0;
+	/*font-family: "Trebuchet MS", "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Tahoma, sans-serif;
+	font-size: 12pt;
+	color: #000000;
+	text-align: left;*/
+	outline: 0px solid #000000;	
+	margin-bottom: 10px;
+}
+
+
+#respond:hover {
+	opacity: 1;
+}
+
+.widget ul, .widget-title {
+	padding-left: 20px;
+	padding-bottom: 10px;
+	font-weight: bold;
+}
+#subscribe-blog{
+	padding: 20px;
+	
+}
+
+.entry-header .comments-link a:hover,
+.entry-header .comments-link a:focus,
+.entry-header .comments-link a:active {
+	background-color: #1982d1;
+	color: #fff;
+	color: rgba(255,255,255,0.8);
+	opacity: 1;
+}
+
+.entry-header .comments-link a {
+    background: url("images/comment-bubble2.png") no-repeat scroll 0 0 #000000;
+    color: #FFFFFF;
+    font-size: 13px;
+    font-weight: normal;
+    height: 36px;
+    line-height: 35px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    right: 0;
+    text-align: center;
+    text-decoration: none;
+    top: 1.5em;
+    width: 43px;
+    opacity: 0.2;
+}
+.comment{
+	padding-left: 20px;
+}
+#comments-title {
+    color: #000000;
+}
+.form-submit {
+	margin-right: 30px;
+}
+.entry-title {
+	margin-top: 5px;
+}
+
+.entry- a .comments-link a {
+	border-bottom: 0px;
+}
+.featured-posts {
+    border-bottom: 0px;
+    
+    
+}
+.featured-post {
+	opacity: 0; 
+}

@@ -18,11 +18,14 @@
  *          along with this program; if not, write to the Free Software
  *          Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110, USA.
  */
-include_once('class-file-list.php');
 class WP_Backup {
 	private $dropbox;
 	private $config;
 	private $output;
+
+	public static function construct() {
+		return new self();
+	}
 
 	public function __construct($dropbox = null, $output = null) {
 		$this->dropbox = $dropbox ? $dropbox : Dropbox_Facade::construct();
@@ -30,11 +33,25 @@ class WP_Backup {
 		$this->config = WP_Backup_Config::construct();
 	}
 
-	public function backup_path($path) {
-		$this->config->set_current_action(sprintf(__('Backing up WordPress path at (%s)', 'wpbtd'), $path));
-		$processed_files = $this->config->get_processed_files();
+	public function backup_path($path, $dropbox_path = null, $always_include = array()) {
+		if (!$this->config->get_option('in_progress'))
+			return;
+
+		if (!$dropbox_path)
+			$dropbox_path = get_blog_root_dir();
+
 		$file_list = new File_List();
-		$next_check = 0;
+
+		$processed_files = $this->config->get_processed_files();
+		$current_processed_files = $uploaded_files = array();
+
+		$next_check = time() + 5;
+		$total_files = $this->config->get_option('total_file_count');
+		if ($total_files < 1500) //I doub't very much a wp installation can get smaller then this
+			$total_files = 1500;
+
+		$processed_file_count = count($processed_files);
+
 		if (file_exists($path)) {
 			$source = realpath($path);
 			$files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($source), RecursiveIteratorIterator::SELF_FIRST, RecursiveIteratorIterator::CATCH_GET_CHILD);
@@ -42,45 +59,66 @@ class WP_Backup {
 				$file = $file_info->getPathname();
 
 				if (time() > $next_check) {
-					if (!$this->config->in_progress())
-						return;
+					if (!$this->config->get_option('in_progress', true)) {
+						$msg = __('Backup stopped by user.', 'wpbtd');
+						WP_Backup_Logger::log($msg);
+						die($msg);
+					}
 
-					$this->config->add_processed_files($processed_files);
+					$percent_done = round(($processed_file_count / $total_files) * 100, 0);
+					if ($percent_done > 99)
+						$percent_done = 99;
+
+					if ($percent_done < 1)
+						$percent_done = 1;
+
+					$this->config->add_processed_files($current_processed_files);
+
+					WP_Backup_Logger::log(sprintf(__('Approximately %s%% complete.', 'wpbtd'),	$percent_done), $uploaded_files);
+
 					$next_check = time() + 5;
+					$uploaded_files = $current_processed_files = array();
 				}
 
-				if ($file_list->is_excluded($file))
+				if (!in_array($file, $always_include) && $file_list->is_excluded($file))
+					continue;
+
+				if ($file_list->in_ignore_list($file))
 					continue;
 
 				if (is_file($file)) {
-					if (File_List::in_ignore_list(basename($file)))
-						continue;
-
 					if (in_array($file, $processed_files))
 						continue;
 
-					if (dirname($file) == $this->config->get_backup_dir() && substr(basename($file), -4, 4) != '.sql')
+					if (dirname($file) == $this->config->get_backup_dir() && !in_array($file, $always_include))
 						continue;
 
-					$this->output->out($source, $file);
+					if ($this->output->out($dropbox_path, $file)) {
+						$uploaded_files[] = array(
+							'file' => str_replace($dropbox_path . DIRECTORY_SEPARATOR, '', $file),
+							'mtime' => filemtime($file),
+						);
+					}
 
-					$processed_files[] = $file;
+					$current_processed_files[] = $file;
+					$processed_file_count++;
 				}
 			}
-			$this->output->end();
+
+			return $processed_file_count;
 		}
 	}
 
 	public function execute() {
 		$manager = WP_Backup_Extension_Manager::construct();
-		$this->config->set_in_progress(true);
+
+		$this->config->set_time_limit();
+		$this->config->set_memory_limit();
+
 		try {
 
-			$this->config->set_memory_limit();
-			$this->config->set_time_limit();
-
 			if (!$this->dropbox->is_authorized()) {
-				$this->config->log(WP_Backup_Config::BACKUP_STATUS_FAILED, __('Your Dropbox account is not authorized yet.', 'wpbtd'));
+				WP_Backup_Logger::log(__('Your Dropbox account is not authorized yet.', 'wpbtd'));
 				return;
 			}
 
@@ -92,49 +130,79 @@ class WP_Backup {
 
 			$manager->on_start();
 
-			$this->backup_path(ABSPATH);
-			if (dirname (WP_CONTENT_DIR) . '/' != ABSPATH)
-				$this->backup_path(WP_CONTENT_DIR);
+			//Backup the content dir first
+			$processed_files = $this->backup_path(WP_CONTENT_DIR, dirname(WP_CONTENT_DIR), array(
+				$core->get_file(),
+				$plugins->get_file()
+			));
 
+			//Now backup the blog root
+			$processed_files += $this->backup_path(get_blog_root_dir());
+
+			//Record the number of files processed to make the progress meter more accurate
+			$this->config->set_option('total_file_count', $processed_files);
+
+			//Remove the backed up SQL files
 			$core->remove_file();
 			$plugins->remove_file();
 
+			//Call end hooks
+			$this->output->end();
 			$manager->on_complete();
-			$this->config->log(WP_Backup_Config::BACKUP_STATUS_FINISHED);
+
+			//Update log file with stats
+			WP_Backup_Logger::log(__('Backup complete.', 'wpbtd'));
+			WP_Backup_Logger::log(sprintf(__('A total of %s files were processed.'), $processed_files));
+			WP_Backup_Logger::log(sprintf(
+				__('A total of %dMB of memory was used to complete this backup.', 'wpbtd'),
+				(memory_get_usage(true) / 1048576)
+			));
+
+			//Process the log file using the default backup output
+			$root = false;
+			if (get_class($this->output) != 'WP_Backup_Output') {
+				$this->output = new WP_Backup_Output();
+				$root = true;
+			}
+
+			$this->output->out(get_blog_root_dir(), WP_Backup_Logger::get_log_file(), $root);
+
+			$this->config
+				->complete()
+				->log_finished_time()
+				;
 
 		} catch (Exception $e) {
 			if ($e->getMessage() == 'Unauthorized')
-				$this->config->log(WP_Backup_Config::BACKUP_STATUS_FAILED, __('The plugin is no longer authorized with Dropbox.', 'wpbtd'));
+				WP_Backup_Logger::log(__('The plugin is no longer authorized with Dropbox.', 'wpbtd'));
 			else
-				$this->config->log(WP_Backup_Config::BACKUP_STATUS_FAILED, "Exception - " . $e->getMessage());
+				WP_Backup_Logger::log("A fatal error occured: " . $e->getMessage());
 
 			$manager->on_failure();
+			$this->stop();
 		}
-		$this->config->set_last_backup_time(time());
-		$this->config->set_in_progress(false);
-		$this->config->clean_up();
 	}
 
 	public function backup_now() {
-		wp_schedule_single_event(time(), 'execute_instant_drobox_backup');
+		if (defined('WPB2D_TEST_MODE'))
+			execute_drobox_backup();
+		else
+			wp_schedule_single_event(time(), 'execute_instant_drobox_backup');
 	}
 
 	public function stop() {
-		$this->config->log(WP_Backup_Config::BACKUP_STATUS_WARNING, __('Backup stopped by user.', 'wpbtd'));
-		$this->config->set_in_progress(false);
-		$this->config->set_last_backup_time(time());
-		$this->config->clean_up();
+		$this->config->complete();
 	}
 
-	public function create_silence_file() {
-		$silence = $this->config->get_backup_dir() . DIRECTORY_SEPARATOR . 'index.php';
+	private static function create_silence_file() {
+		$silence = WP_Backup_Config::get_backup_dir() . DIRECTORY_SEPARATOR . 'index.php';
 		if (!file_exists($silence)) {
 			$fh = @fopen($silence, 'w');
 			if (!$fh) {
 				throw new Exception(
 					sprintf(
 						__("WordPress does not have write access to '%s'. Please grant it write privileges before using this plugin."),
-						$this->config->get_backup_dir()
+						WP_Backup_Config::get_backup_dir()
 					)
 				);
 			}
@@ -143,8 +211,8 @@ class WP_Backup {
 		}
 	}
 
-	public function create_dump_dir() {
-		$dump_dir = $this->config->get_backup_dir();
+	public static function create_dump_dir() {
+		$dump_dir = WP_Backup_Config::get_backup_dir();
 		if (!file_exists($dump_dir)) {
 			//It really pains me to use the error suppressor here but PHP error handling sucks :-(
 			if (!@mkdir($dump_dir)) {
@@ -156,6 +224,6 @@ class WP_Backup {
 				);
 			}
 		}
-		return $dump_dir;
+		self::create_silence_file();
 	}
 }

@@ -18,10 +18,15 @@
  *          along with this program; if not, write to the Free Software
  *          Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110, USA.
  */
-include_once('class-wp-backup.php');
 class File_List {
 
-	private static $ignored_files = array('.DS_Store', 'Thumbs.db', 'desktop.ini');
+	private static $ignored_patterns = array(
+		'.DS_Store', 'Thumbs.db', 'desktop.ini',
+		'.git', '.gitignore', '.gitmodules',
+		'.svn', '.dropbox',
+		'.sass-cache',
+	);
+
 	private $excluded_files;
 	private $excluded_dirs;
 
@@ -30,8 +35,6 @@ class File_List {
 	}
 
 	public function __construct() {
-		delete_option('backup-to-dropbox-file-list');
-
 		$file_list = get_option('backup-to-dropbox-excluded-files');
 		if ($file_list === false) {
 			$this->excluded_files = array();
@@ -40,12 +43,6 @@ class File_List {
 		} else {
 			list($this->excluded_dirs, $this->excluded_files) = $file_list;
 		}
-	}
-
-	public function test_memory() {
-		$limit = WP_Backup_Config::construct()->set_memory_limit();
-		if ($limit < 64)
-			throw new Exception(sprintf(__('Memory limit could not be set and your settings are too low to use this widget, please increase your PHP memory_limit to at least %sM (%sM is recommended).'), 64, 150));
 	}
 
 	public function set_included($path) {
@@ -105,7 +102,7 @@ class File_List {
 		if (in_array($dir, $this->excluded_dirs))
 			return true;
 
-		if ($dir == rtrim(ABSPATH,'/'))
+		if ($dir == rtrim(get_blog_root_dir(),'/'))
 			return false;
 
 		return $this->is_excluded_dir(dirname($dir));
@@ -114,14 +111,17 @@ class File_List {
 	private function is_partial_dir($dir) {
 		if (is_dir($dir) && is_readable($dir)) {
 			$files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($dir), RecursiveIteratorIterator::SELF_FIRST, RecursiveIteratorIterator::CATCH_GET_CHILD);
+			$files->setMaxDepth(10);
 			foreach ($files as $file) {
-				if ($file == $dir)
+				$file_name = $file->getPathname();
+
+				if ($file_name == $dir)
 					continue;
 
-				if (self::in_ignore_list(basename($file)))
+				if (self::in_ignore_list(basename($file_name)))
 					continue;
 
-				if ($this->is_excluded($file))
+				if ($this->is_excluded($file_name))
 					return true;
 			}
 		}
@@ -143,6 +143,9 @@ class File_List {
 	}
 
 	public static function in_ignore_list($file) {
-		return in_array($file, self::$ignored_files);
+		foreach (self::$ignored_patterns as $pattern) {
+			if (preg_match('/' . preg_quote($pattern) . '/', $file))
+				return true;
+		}
 	}
 }

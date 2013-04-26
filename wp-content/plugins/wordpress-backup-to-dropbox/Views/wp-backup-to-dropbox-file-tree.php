@@ -21,9 +21,11 @@
  *          along with this program; if not, write to the Free Software
  *          Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110, USA.
  */
+WP_Backup_Config::set_time_limit();
+WP_Backup_Config::set_memory_limit();
+
 try {
 	$file_list = new File_List();
-	$file_list->test_memory();
 
 	if (isset($_POST['dir'])) {
 		$_POST['dir'] = urldecode($_POST['dir']);
@@ -36,7 +38,11 @@ try {
 				foreach ($files as $file) {
 					if ($file != '.' && $file != '..' && file_exists($_POST['dir'] . $file) && is_dir($_POST['dir'] . $file)) {
 
-						if (!is_readable($_POST['dir']) || $_POST['dir'] == dirname(ABSPATH) . '/' && !strstr($file, basename(ABSPATH))) {
+						if (!is_readable($_POST['dir']) || $_POST['dir'] == dirname(get_blog_root_dir()) . '/' && !strstr($file, basename(get_blog_root_dir()))) {
+							continue;
+						}
+
+						if ($file_list->in_ignore_list($file)) {
 							continue;
 						}
 
@@ -55,7 +61,7 @@ try {
 
 					if ($file != '.' && $file != '..' && file_exists($_POST['dir'] . $file) && !is_dir($_POST['dir'] . $file)) {
 
-						if ($_POST['dir'] == dirname(ABSPATH) . '/' && !strstr($file, basename(ABSPATH))) {
+						if ($_POST['dir'] == dirname(get_blog_root_dir()) . '/' && !strstr($file, basename(get_blog_root_dir()))) {
 							continue;
 						}
 
@@ -86,5 +92,5 @@ try {
 			$file_list->set_included($_POST['path']);
 	}
 } catch (Exception $e) {
-	echo '<p class="backup_error">' . $e->getMessage() . '</p>';
+	echo '<p class="error">' . $e->getMessage() . '</p>';
 }

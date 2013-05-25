@@ -54,7 +54,7 @@ function cccomm_option_page()
 function cccomm_plugin_menu()
 {
 	add_menu_page('CC Comments', 'CC Comments', 'manage_options', 'cc_comments-plugin', 'cccomm_option_page', 
-					'/bl/wp-content/plugins/cc_comment/cc_icon.png',30);
+					WP_PLUGIN_URL."/cc_comment/cc_icon.png",30);
 	add_submenu_page('cc_comments-plugin','CC Comments Options 2', 'CC Comments Options 2', 'manage_options', 
 					'cc_comments-plugin2', 'cccomm_option_page');
 }

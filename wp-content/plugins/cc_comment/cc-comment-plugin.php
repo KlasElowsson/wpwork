@@ -29,6 +29,7 @@ Author URI: http://klaselo.se
 // Denna funktion registrerar våra options settngs så de är i samma binge som alla övriga 
 function cccomm_init()
 {
+  //Denna refistrering skapar databas post möjlighet. Posten skapas först sedan man matat in en address. 
 	register_setting('cccomm_options','cccomm_cc_email');
 }
 add_action('admin_init','cccomm_init');
@@ -51,15 +52,21 @@ function cccomm_option_page()
 	<?php
 }
 
+// Skapar en menyrad under administration
 function cccomm_plugin_menu()
 {
+	//I detta fall räcker denna meny.. bortkommenterat finns nedan en undermeny
 	add_menu_page('CC Comments', 'CC Comments', 'manage_options', 'cc_comments-plugin', 'cccomm_option_page', 
 					plugin_dir_url(__FILE__).'cc_icon.png',30);
-	add_submenu_page('cc_comments-plugin','CC Comments Options 2', 'CC Comments Options 2', 'manage_options', 
-					'cc_comments-plugin2', 'cccomm_option_page');
+  // eventuellundermeny
+	//add_submenu_page('cc_comments-plugin','CC Comments Options 2', 'CC Comments Options 2', 'manage_options', 
+	//				'cc_comments-plugin2', 'cccomm_option_page');
 }
 add_action('admin_menu', 'cccomm_plugin_menu');
 
+
+// Den funktion som jag villha när någon kommenterar på sidan.
+// Email sänds till inmatad address
 function cc_comment()
 {
 	global $_REQUEST;

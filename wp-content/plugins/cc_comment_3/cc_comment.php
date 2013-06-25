@@ -26,6 +26,7 @@ function cccomm_init()
 }
 add_action('admin_init','cccomm_init');
 
+// Kontrollerar att rätt format för email används
 function cccomm_email_check()
 {
 	$email =isset($_POST['cccomm_cc_email'])?$_POST['cccomm_cc_email']:null;
@@ -43,6 +44,7 @@ function cccomm_email_check()
 add_action('wp_ajax_cccomm_email_check','cccomm_email_check');
 add_action('admin_print_scripts-options-general.php', 'cccomm_email_check_script');
 
+// här ser vi till att java scripen finns med i sidan
 function cccomm_email_check_script()
 {
   wp_enqueue_script( "cc-comments", path_join(WP_PLUGIN_URL, basename( dirname( __FILE__ ) )."/cc_comments.js"), array( 'jquery' ) );
@@ -65,6 +67,12 @@ function cccomm_setting_section()
 	<?php 
 }
 
+//Här skapas raderna i den generella inställningssidan
+/*
+ * Här finns ien bugg. Om man går direkt från bytt email till spara så hinner inte logiken med.
+ * Ibland ändras addressen tillbaks till gamla värdet. Allt beror på att inte kontrollen hinner med innan 
+ * värdet skickas och det nya värdet diskas
+ */
 function cccomm_plugin_menu()
 { 	
 	add_settings_section('cccomm','CC Comments','cccomm_setting_section','general');
@@ -73,7 +81,7 @@ function cccomm_plugin_menu()
 add_action('admin_menu', 'cccomm_plugin_menu');
 
 
-
+// Här har vi en rad som plockar bort addressen om man avregistrerar vårt tillägg
 register_uninstall_hook(__FILE__,'cccomm_uninstall');
 
 function cccomm_uninstall()

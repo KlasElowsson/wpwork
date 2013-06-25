@@ -7,7 +7,7 @@ Author: Drew Falkman
 Version: 1.0
 Author URI: http://www.falkonproductions.com/
  */
-
+// Mer strukturerad variant. Inställningar i Generell settings
 // Registrerar cccomm_cc_email som option i general settings
  function cccomm_init()
 {

@@ -185,7 +185,7 @@ try {
 				$backup_date = date('l F j, Y', $blog_time);
 				$backup_time_str = date('H:i:s', $blog_time);
 
-				echo '<li>' . sprintf(__('Backup completed on %s at %s.'), $backup_date, $backup_time_str) . '</li>';
+				echo '<li>' . sprintf(__('Backup completed on %s at %s.', 'wpbtd'), $backup_date, $backup_time_str) . '</li>';
 			}
 			echo '</ol>';
 			echo '<input type="submit" id="clear_history" name="clear_history"" class="bump button-secondary" value="' . __('Clear history', 'wpbtd') . '">';
@@ -361,8 +361,7 @@ try {
 			<p style="color: red"><?php _e('There was an error authorizing the plugin with your Dropbox account. Please try again.', 'wpbtd'); ?></p>
 		<?php endif; ?>
 	<p>
-	<form id="backup_to_dropbox_continue" name="backup_to_dropbox_continue"
-		  action="options-general.php?page=backup-to-dropbox" method="post">
+	<form id="backup_to_dropbox_continue" name="backup_to_dropbox_continue" method="post">
 		<input type="button" name="authorize" id="authorize" value="<?php _e('Authorize', 'wpbtd'); ?>"
 			   class="button-primary" onclick="dropbox_authorize('<?php echo $dropbox->get_authorize_url() ?>')"/><br/>
 		<input style="visibility: hidden;" type="submit" name="continue" id="continue"

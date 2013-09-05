@@ -40,6 +40,9 @@ span.option_value {
 .onoffswitch-checkbox {
     display: none;
 }
+input.onoffswitch-checkbox[type="checkbox"] {
+    display: none;
+}
 .onoffswitch-label {
     display: block; overflow: hidden; cursor: pointer;
     border: 2px solid #999999; border-radius: 20px;

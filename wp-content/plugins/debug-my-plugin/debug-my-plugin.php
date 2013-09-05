@@ -3,7 +3,7 @@
 Plugin Name: Debug My Plugin
 Plugin URI: http://www.charlestonsw.com/product/debug-my-plugin/
 Description: Debug your plugin with the help of Debug Bar.  Puts debugging messages in the drop down Debug Bar interface.
-Version: 0.9.1
+Version: 0.9.2
 Author: Charleston Software Associates
 Author URI: http://www.charlestonsw.com
 License: GPL3

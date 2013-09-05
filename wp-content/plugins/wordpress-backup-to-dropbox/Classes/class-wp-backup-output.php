@@ -2,7 +2,7 @@
 /**
  * A class with functions the perform a backup of WordPress
  *
- * @copyright Copyright (C) 2011 Michael De Wildt. All rights reserved.
+ * @copyright Copyright (C) 2011-2013 Michael De Wild. All rights reserved.
  * @author Michael De Wildt (http://www.mikeyd.com.au/)
  * @license This program is free software; you can redistribute it and/or modify
  *          it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@ class WP_Backup_Output extends WP_Backup_Extension {
 
 	public function out($source, $file, $processed_file = null) {
 		if ($this->error_count > self::MAX_ERRORS)
-			throw new Exception(sprintf(__('The backup is having trouble uploading files to Dropbox, it has failed %s times and is aborting the backup.'), self::MAX_ERRORS));
+			throw new Exception(sprintf(__('The backup is having trouble uploading files to Dropbox, it has failed %s times and is aborting the backup.', 'wpbtd'), self::MAX_ERRORS));
 
 		if (!$this->dropbox)
 			throw new Exception(__("Dropbox API not set"));

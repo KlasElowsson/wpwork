@@ -2,10 +2,10 @@
 Plugin Name:  Debug My Plugin with Debug Bar
 Contributors: charlestonsw
 Donate link: http://www.charlestonsw.com/product/debug-my-plugin/
-Tags: debugging, debug bar, plugin, wordpress
+Tags: debugging, debug bar, plugin, debug log
 Requires at least: 3.3
 Tested up to: 3.6
-Stable tag: 0.9.1
+Stable tag: 0.9.2
 
 Debug your plugin with the help of Debug Bar.  Puts debugging messages in the drop down Debug Bar interface.
 
@@ -147,6 +147,10 @@ on the [CSL License Terms page](http://www.charlestonsw.com/products/general-eul
 7. Example multi-panel, second plugin panel, output with leading counter.
 
 == Changelog ==
+
+= 0.9.2 =
+
+* Enhancement : Fix the slider CSS for the on/off switches so they work well with the MP6 (WP3.8 preview) plugin.
 
 = 0.9.1 =
 

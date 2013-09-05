@@ -3,7 +3,7 @@ Contributors: michael.dewildt
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=38SEXDYP28CFA
 Tags: backup, dropbox
 Requires at least: 3.0
-Tested up to: 3.5.1
+Tested up to: 3.6
 Stable tag: trunk
 
 Keep your valuable WordPress website, its media and database backed up to Dropbox in minutes with this sleek, easy to use plugin.
@@ -83,6 +83,7 @@ For news and updates please visit my blog - http://www.mikeyd.com.au/category/wo
 * Hungarian (hu_HU) - [Lazarevics](http://hardverborze.tk)
 * Russian (ru_RU) - [Evgeny Vlasov](http://verha.net)
 * Sweedish (sv_SE) - [Webbyrå](http://webbyra.se)
+* Finland (fi_FI) - [Timo Leiniö](http://wpopas.fi)
 
 Help keep WPB2D's language files up ot date on [HunStart](https://code.google.com/p/wpbtd)
 
@@ -100,9 +101,7 @@ To diagnose issues with your plugin please refer to this [sticky topic](http://w
 
 = How do I restore my website? =
 
-Simply download [WPB2D Simple Restore](http://wpb2d.com/simple-restore) and upload it to an empty host. Once uploaded you will be guided through a wizard of 5 easy steps and have your blog restored in no time.
-
-You don’t even have to install WordPress!
+Restoring can be a complicated process because every host is different. You can try and follow the steps in this [blog post](http://www.mikeyd.com.au/2011/10/26/restoring-wordpress-from-a-backup-to-dropbox-using-cpanel-and-phpmyadmin), if that does not work I would consult your web developer for help.
 
 = Why does my keep going away and resuming? =
 
@@ -137,6 +136,25 @@ You can also install the zip [premium extension](http://wpb2d.com/premium) that 
 3. Premium Extensions: Add extra functionality with ease and a 60 day money back guarantee.
 
 == Changelog ==
+
+= 1.6.1 =
+* Added [Extendy](http://extendy.com) and improved extension installation user interface that fixes a few bugs and adds the ability to renew and buy bundles.
+* Use ABSPATH for WP root if get_home_path returns '/' that can cause the plugin the attemt to backup root.
+* Improved security of DB dumps, Zip archives and the backup log. A better sha1 secret is now appended to them all and removed before upload to Dropbox.
+* Update cURL CA Certs to the latest version from Mozilla
+
+= 1.6 =
+* Added Finnish translations
+* WordPress 3.6 compatiblity release
+* Fixed some issues where temporary files where not being cleaned up as expected
+* Removed upgrade migration code for performance reasons. So, if you are upagading form <1.5 you will need to re-authorize and re-configure the plugin.
+
+= 1.5.5 =
+* Updated Arabic translations
+* Fixed missing directory separator when creating silence file
+* Updated the Dropbox API lib to exclude HTTP headers inserted by proxies
+* Fixed another weird oAuth authorize issue
+* Fixed 404 when clicking continue in network setup
 
 = 1.5.4 =
 * Fixed another weird state issue with the Dropbox oauth flow

@@ -3,10 +3,10 @@
 Plugin Name: WordPress Backup to Dropbox
 Plugin URI: http://wpb2d.com
 Description: Keep your valuable WordPress website, its media and database backed up to Dropbox in minutes with this sleek, easy to use plugin.
-Version: 1.5.4
+Version: 1.6.1
 Author: Michael De Wildt
 Author URI: http://www.mikeyd.com.au
-License: Copyright 2011  Michael De Wildt  (email : michael.dewildt@gmail.com)
+License: Copyright 2011-2013  Michael De Wildt  (email : michael.dewildt@gmail.com)
 
 		This program is free software; you can redistribute it and/or modify
 		it under the terms of the GNU General Public License, version 2, as
@@ -21,10 +21,9 @@ License: Copyright 2011  Michael De Wildt  (email : michael.dewildt@gmail.com)
 		along with this program; if not, write to the Free Software
 		Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
-define('BACKUP_TO_DROPBOX_VERSION', '1.5.4');
+define('BACKUP_TO_DROPBOX_VERSION', '1.6.1');
 define('BACKUP_TO_DROPBOX_DATABASE_VERSION', '1');
-
-define('EXTENSIONS_DIR', str_replace(DIRECTORY_SEPARATOR, '/', WP_CONTENT_DIR . '/plugins/wordpress-backup-to-dropbox/Extensions/'));
+define('EXTENSIONS_DIR', str_replace('/', DIRECTORY_SEPARATOR, WP_CONTENT_DIR . '/plugins/wordpress-backup-to-dropbox/Extensions/'));
 define('CHUNKED_UPLOAD_THREASHOLD', 10485760); //10 MB
 define('MINUMUM_PHP_VERSION', '5.2.16');
 
@@ -99,7 +98,7 @@ function backup_to_dropbox_admin_menu() {
 		$text = __('Backup Log', 'wpbtd');
 		add_submenu_page('backup-to-dropbox', $text, $text, 'activate_plugins', 'backup-to-dropbox-monitor', 'backup_to_dropbox_monitor');
 
-		WP_Backup_Extension_Manager::construct()->add_menu_items();
+		WP_Backup_Registry::extension_manager()->add_menu_items();
 
 		$text = __('Premium Extensions', 'wpbtd');
 		add_submenu_page('backup-to-dropbox', $text, $text, 'activate_plugins', 'backup-to-dropbox-premium', 'backup_to_dropbox_premium');
@@ -142,6 +141,8 @@ function backup_to_dropbox_monitor() {
  */
 function backup_to_dropbox_premium() {
 	wpb2d_style();
+	wp_enqueue_script('jquery-ui-core');
+	wp_enqueue_script('jquery-ui-tabs');
 
 	$uri = rtrim(WP_PLUGIN_URL, '/') . '/wordpress-backup-to-dropbox';
 	include('Views/wp-backup-to-dropbox-premium.php');
@@ -180,8 +181,9 @@ function execute_drobox_backup() {
 		ini_get('memory_limit')
 	));
 
-	if (ini_get('safe_mode'))
+	if (ini_get('safe_mode')) {
 		WP_Backup_Registry::logger()->log(__("Safe mode is enabled on your server so the PHP time and memory limit cannot be set by the backup process. So if your backup fails it's highly probable that these settings are too low.", 'wpbtd'));
+	}
 
 	WP_Backup_Registry::config()->set_option('in_progress', true);
 
@@ -286,13 +288,6 @@ function wpb2d_install() {
 		UNIQUE KEY file (file)
 	);");
 
-	$table_name = $wpdb->prefix . 'wpb2d_premium_extensions';
-	dbDelta("CREATE TABLE $table_name (
-		name varchar(50) NOT NULL,
-		file varchar(255) NOT NULL,
-		UNIQUE KEY name (name)
-	);");
-
 	//Ensure that there where no insert errors
 	$errors = array();
 
@@ -306,80 +301,23 @@ function wpb2d_install() {
 		delete_option('wpb2d-init-errors');
 		add_option('wpb2d-init-errors', implode($errors, '<br />'), false, 'no');
 	}
-}
 
-function wpb2d_install_data() {
-	$wpdb = WP_Backup_Registry::db();
-	$config = WP_Backup_Registry::config();
-
-	$options = get_option('backup-to-dropbox-options');
-	if ($options) {
-		foreach ($options as $key => $value)
-			if (!is_array($value))
-				$config->set_option($key, $value);
+	//Only set the DB version if there are no errors
+	if (empty($errors)) {
+		WP_Backup_Registry::config()->set_option('database_version', BACKUP_TO_DROPBOX_DATABASE_VERSION);
 	}
-
-	$tokens = get_option('backup-to-dropbox-tokens');
-	if (isset($tokens['access'])) {
-		$config->set_option('access_token', $tokens['access']->oauth_token);
-		$config->set_option('access_token_secret', $tokens['access']->oauth_token_secret);
-		$config->set_option('oauth_state', 'access');
-	}
-
-	$history = get_option('backup-to-dropbox-history');
-	if ($history) {
-		$wpdb->insert($wpdb->prefix . 'wpb2d_options', array(
-			'name' => 'history',
-			'value' => implode(',', $history),
-		));
-	}
-
-	list($dirs, $files) = get_option('backup-to-dropbox-excluded-files');
-	if ($files) {
-		foreach ($files as $file) {
-			$wpdb->insert($wpdb->prefix . 'wpb2d_excluded_files', array(
-				'file' => $file,
-				'isdir' => false
-			));
-		}
-	}
-
-	if ($dirs) {
-		foreach ($dirs as $file) {
-			$wpdb->insert($wpdb->prefix . 'wpb2d_excluded_files', array(
-				'file' => $file,
-				'isdir' => true
-			));
-		}
-	}
-
-	$config->set_option('database_version', BACKUP_TO_DROPBOX_DATABASE_VERSION);
-
-	//Delete unused options
-	delete_option('backup-to-dropbox-tokens');
-	delete_option('backup-to-dropbox-premium-extensions');
-	delete_option('backup-to-dropbox-excluded-files');
-	delete_option('backup-to-dropbox-processed-files');
-	delete_option('backup-to-dropbox-history');
-	delete_option('backup-to-dropbox-options');
-	delete_option('backup-to-dropbox-actions');
-	delete_option('backup-to-dropbox-file-list');
-	delete_option('backup-to-dropbox-log');
-	delete_option('wpb2d_database_version');
 }
 
 function wpb2d_init() {
 	try {
-		//Check that the plugin's database tables are up to date
-		$wpdb = WP_Backup_Registry::db();
-		$tables = $wpdb->get_results("SHOW TABLES LIKE '{$wpdb->prefix}wpb2d_%%'");
-		if (count($tables) < 4 || WP_Backup_Registry::config()->get_option('database_version') < BACKUP_TO_DROPBOX_DATABASE_VERSION) {
+		if (WP_Backup_Registry::config()->get_option('database_version') < BACKUP_TO_DROPBOX_DATABASE_VERSION) {
 			wpb2d_install();
-			wpb2d_install_data();
 		}
 
-		//Initilise extensions
-		WP_Backup_Extension_Manager::construct()->init();
+        if (!get_option('wpb2d-premium-extensions')) {
+            add_option('wpb2d-premium-extensions', array(), false, 'no');
+        }
+
 	} catch (Exception $e) {
 		error_log($e->getMessage());
 	}
@@ -388,6 +326,13 @@ function wpb2d_init() {
 function get_sanitized_home_path() {
 	//Needed for get_home_path() function and may not be loaded
 	require_once(ABSPATH . 'wp-admin/includes/file.php');
+
+	//If site address and WordPress address differ but are not in a different directory
+	//then get_home_path will return '/' and cause issues.
+	$home_path = get_home_path();
+	if ($home_path == '/') {
+		$home_path = ABSPATH;
+	}
 
 	return rtrim(str_replace('/', DIRECTORY_SEPARATOR, get_home_path()), DIRECTORY_SEPARATOR);
 }
@@ -403,7 +348,6 @@ add_action('execute_instant_drobox_backup', 'execute_drobox_backup');
 
 //Register database install
 register_activation_hook(__FILE__, 'wpb2d_install');
-register_activation_hook(__FILE__, 'wpb2d_install_data');
 
 add_action('plugins_loaded', 'wpb2d_init');
 
@@ -420,8 +364,9 @@ if (is_admin()) {
 			if (!is_array($menu_ord))
 				return true;
 
-			if (in_array('backup-to-dropbox', $menu_ord))
+			if (in_array('backup-to-dropbox', $menu_ord)) {
 				$menu_ord[] = array_shift($menu_ord);
+			}
 
 			return $menu_ord;
 		}
@@ -434,4 +379,3 @@ if (is_admin()) {
 		add_action('admin_menu', 'backup_to_dropbox_admin_menu');
 	}
 }
-

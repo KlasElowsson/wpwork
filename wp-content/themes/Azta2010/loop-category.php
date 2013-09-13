@@ -55,6 +55,7 @@
 	 *
 	 * Without further ado, the loop:
 	 */ ?>
+<?php $annons_cnt=0; //Används för att gruppera 3 o 3 vid annonser ?>	 
 <?php while ( have_posts() ) : the_post(); ?>
 
 <?php /* How to display posts of the Gallery format. The gallery category is the old way. */ ?>
@@ -124,21 +125,37 @@
 				<?php edit_post_link( __( 'Edit', 'twentyten' ), '<span class="meta-sep">|</span> <span class="edit-link">', '</span>' ); ?>
 			</div><!-- .entry-utility -->
 		</div><!-- #post-## -->
+		
+		
+		
+		
 
 <?php /* How to display all other posts. */ ?>
-
 	<?php else : ?>
-		<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
-			<h2 class="entry-title"><a href="<?php the_permalink(); ?>" rel="bookmark"><?php the_title(); ?></a></h2>
+
+<?php if ($annons_cnt==0) : ?>
+      <div class="annons-grupp">
+<?php elseif ($annons_cnt%2==0) : ?>
+      </div><!-- slut annons-grupp -->
+      <div class="annons-grupp">  
+<?php endif; ?>  
+<?php $annons_cnt++ ;?>
+        
+	  
+		<div id="post-<?php the_ID(); ?>" <?php post_class("annons-fl"); ?>>
+			<h2 class="entry-title annons-title"><a href="<?php the_permalink(); ?>" rel="bookmark"><?php the_title(); ?></a></h2>
 
 			<div class="entry-meta">
 				<!--<?php twentyten_posted_on(); ?>-->
 			</div><!-- .entry-meta -->
 
 	<?php if ( is_archive() || is_search() ) : // Only display excerpts for archives and search. ?>
-			<div class="entry-summary">
+			<div class="entry-summary annons">
 				<!--<?php the_excerpt(); ?>-->
+        
         <?php the_content(); ?>
+
+
 			</div><!-- .entry-summary -->
 	<?php else : ?>
 			<div class="entry-content">
@@ -173,6 +190,10 @@
 	<?php endif; // This was the if statement that broke the loop into three parts based on categories. ?>
 
 <?php endwhile; // End the loop. Whew. ?>
+
+<?php if ($annons_cnt > 0) :?>
+      </div><!-- slut annons-grupp -->
+<?php endif; ?>
 
 <?php /* Display navigation to next/previous pages when applicable */ ?>
 <?php if (  $wp_query->max_num_pages > 1 ) : ?>

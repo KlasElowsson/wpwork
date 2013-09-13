@@ -56,7 +56,7 @@ function wp_cart_display_product_handler($atts)
 	            $description
 	        </div>
 			<div class="wp_cart_product_price">
-	        	{$currency_symbol}{$price}
+	        	{$price} {$currency_symbol}
 	        </div>
 			<div class="wp_cart_product_button">
 	        	$button_code

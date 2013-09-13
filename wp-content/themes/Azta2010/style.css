@@ -12,6 +12,17 @@ Tags: two-columns, right-sidebar, custom-header, custom-colors, custom-backgroun
 .hentry {
     margin: 0 0 0px;
 }
+/*Lagt till för att ändra annonssidorna loop-category.php*/
+.annons-fl {
+		float: left;
+}
+/*Lagt till för att ändra annonssidorna loop-category.php*/
+.annons {
+		width: 300px;
+}
+#content h2.annons-title {
+		text-align: center;
+}
 .price {
     margin-bottom: 10px;
 }
@@ -20,4 +31,14 @@ Tags: two-columns, right-sidebar, custom-header, custom-colors, custom-backgroun
 }
 .entry-content select {
     margin: 0 0 10px;
+}
+/*
+.post {
+		background-color: #CFCFCF;
+		margin: 1px;
+}*/
+.annons-grupp {
+		background-color: #FFFFFF;
+		margin: 1px;
+		float: left;	
 }

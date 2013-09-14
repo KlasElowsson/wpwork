@@ -675,7 +675,7 @@ function cart_not_empty()
 
 function print_payment_currency($price, $symbol, $decimal)
 {
-    return number_format($price, 2, $decimal, ',').$symbol;
+    return number_format($price, 2, $decimal, ',').' '.$symbol;
 }
 
 function cart_current_page_url() {

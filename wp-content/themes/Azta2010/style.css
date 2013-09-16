@@ -1,7 +1,7 @@
 /* Imports all styles from the TwentyTen stylesheet */
 @import url('../twentyten/style.css');
 /*
-Theme Name: Theme Aztazcheapshop
+Theme Name: Theme Aztazcheapshop twentyten
 Theme URI: http://klaselo.se
 Description: Twentyten child-theme with seriously good looks
 Author: Klas Elowsson
@@ -42,3 +42,5 @@ Tags: two-columns, right-sidebar, custom-header, custom-colors, custom-backgroun
 		margin: 1px;
 		float: left;	
 }
+.post-meta {font-variant: small-caps; color: maroon; }
+.post-meta-key {color: green; font-weight: bold; font-size: 110%; }

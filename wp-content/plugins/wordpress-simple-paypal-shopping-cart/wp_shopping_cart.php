@@ -110,8 +110,12 @@ function wpspc_cart_actions_handler()
             setcookie("cart_in_use","true",time()+21600,"/",$cookie_domain);  //useful to not serve cached page when using with a caching plugin
 
             //sanitize data
-            $_POST['product'] = strip_tags($_POST['product']);//for PHP5.2 use filter_var($_POST['product'], FILTER_SANITIZE_STRING);
-            $_POST['item_number'] = strip_tags($_POST['item_number']);
+            if (isset($_POST['product'])) {
+              $_POST['product'] = strip_tags($_POST['product']);//for PHP5.2 use filter_var($_POST['product'], FILTER_SANITIZE_STRING);
+            }
+            if (isset($_POST['item_number'])) {
+              $_POST['item_number'] = strip_tags($_POST['item_number']);
+            }
             if(isset($_POST['price']))$_POST['price'] = strip_tags($_POST['price']);
             isset($_POST['shipping'])?$_POST['shipping'] = strip_tags($_POST['shipping']):$_POST['shipping']='';
             isset($_POST['cartLink'])?$_POST['cartLink'] = strip_tags($_POST['cartLink']):$_POST['cartLink']='';
@@ -232,6 +236,7 @@ function wpspc_cart_actions_handler()
 
 function print_wp_shopping_cart()
 {
+  $output ="";
 	if (!cart_not_empty())
 	{
 	    $empty_cart_text = get_option('wp_cart_empty_text');
@@ -314,6 +319,7 @@ function print_wp_shopping_cart()
         <th style="text-align: left">'.(__("Item Name", "WSPSC")).'</th><th>'.(__("Quantity", "WSPSC")).'</th><th>'.(__("Price", "WSPSC")).'</th><th></th>
         </tr>';
     
+	    $item_total_shipping = 0.00;
 	    foreach ($_SESSION['simpleCart'] as $item)
 	    {
 	        $total += $item['price'] * $item['quantity'];
@@ -650,11 +656,11 @@ function print_wp_cart_button_for_product($name, $price, $shipping=0, $var1='', 
 		}
         $replacement .= '<input type="hidden" name="product" value="'.$name.'" /><input type="hidden" name="price" value="'.$price.'" /><input type="hidden" name="shipping" value="'.$shipping.'" /><input type="hidden" name="addcart" value="1" /><input type="hidden" name="cartLink" value="'.cart_current_page_url().'" />';
         $replacement .= '<input type="hidden" name="product_tmp" value="'.$name.'" />';
-        if($atts['file_url']){
-            $file_url = $atts['file_url'];
-            $file_url = base64_encode($file_url); 
-            $replacement .= '<input type="hidden" name="file_url" value="'.$file_url.'" />';
-        }
+ //       if($atts['file_url']){
+ //           $file_url = $atts['file_url'];
+ //           $file_url = base64_encode($file_url); 
+ //           $replacement .= '<input type="hidden" name="file_url" value="'.$file_url.'" />';
+ //       }
 	$replacement .= '</form>';
         $replacement .= '</div>';
         return $replacement;

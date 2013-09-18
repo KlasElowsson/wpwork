@@ -15,10 +15,12 @@ Tags: two-columns, right-sidebar, custom-header, custom-colors, custom-backgroun
 /*Lagt till för att ändra annonssidorna loop-category.php*/
 .annons-fl {
 		float: left;
+		border-right-width: 5px;
+    padding: 0 5px;
 }
 /*Lagt till för att ändra annonssidorna loop-category.php*/
 .annons {
-		width: 300px;
+		width: 310px;
 }
 #content h2.annons-title {
 		text-align: center;
@@ -42,5 +44,11 @@ Tags: two-columns, right-sidebar, custom-header, custom-colors, custom-backgroun
 		margin: 1px;
 		float: left;	
 }
-.post-meta {font-variant: small-caps; color: maroon; }
-.post-meta-key {color: green; font-weight: bold; font-size: 110%; }
+.post-meta {
+		font-variant: small-caps; 
+		color: maroon; 
+}
+.post-meta-key {
+		color: green; 
+		font-weight: bold; 
+		font-size: 80%; }

@@ -536,4 +536,7 @@ class productsView extends view {
 		}
 		return false;
 	}
+	public function getComingSoonProductButtons($post) {
+		return parent::getContent('comingSoonProductButtons');
+	}
 }

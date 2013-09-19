@@ -58,11 +58,13 @@ class extrafieldsModel extends model {
 					$skipFields[$f['id']] = true;
 			}
             foreach($fields as $f) {
+				if((int)$f['opt_parent_id'] && (int)$parent && (int)$parent !== (int)$f['opt_parent_id'])
+					continue;
                 if(!isset($res[$f['id']]))
                     $res[$f['id']] = $f;
-	
 				// Skip fields for other products and if not empty (LEFT JOIN).
 				$isForCurrentParrent = (int)$parent === (int)$f['opt_parent_id'];
+				
 				if((!$isForCurrentParrent)&&(!empty($f['opt_val_id'])) &&(isset($skipFields[$f['id']]))&&($skipFields[$f['id']]))
 					continue;
 				

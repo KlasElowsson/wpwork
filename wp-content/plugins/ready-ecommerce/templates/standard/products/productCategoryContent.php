@@ -152,15 +152,7 @@
                             <?php if ($this->viewOptions['add_to_cart']) :?>
                             <!--toeadd_to_cart-->
                             <div class="add_to_cart">
-                                <?php echo html::hidden('goto')?>
-                                <?php echo html::hidden('addQty', array('value' => 1))?>
-                                <?php echo html::hidden('mod', array('value' => 'user'))?>
-                                <?php echo html::hidden('action', array('value' => 'addToCart'))?>
-                                <?php echo html::hidden('pid', array('value' => $this->post->ID))?>
-                                <?php echo html::hidden('reqType', array('value' => 'ajax'))?>
-								<?php echo html::hidden('gotoOnError', array('value' => 'product'))?>
-                                <div class="toeAddToCartMsg"></div>
-                                <?php echo html::submit('add', array('value' => lang::_('Add to Cart'), 'attrs' => 'class="pink_btn"'))?>
+                               <?php echo $this->actionButtons?>
                             </div>
                             <!--/toeadd_to_cart-->
                             <?php endif;?>

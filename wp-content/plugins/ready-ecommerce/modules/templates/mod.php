@@ -54,6 +54,8 @@ class templates extends module {
 			'options'					=> frame::_()->getModule('options')->getByCode(),
 			'countries'					=> fieldAdapter::getCachedCountries(),
 			'allCheckRegPlugs'			=> modInstaller::getCheckRegPlugs(),
+			'wpVersion'					=> get_bloginfo('version'),
+			'wpVersionFloat'			=> floatval(get_bloginfo('version')),
         );
         $jsData = dispatcher::applyFilters('jsInitVariables', $jsData);
         frame::_()->addScript('thickbox');

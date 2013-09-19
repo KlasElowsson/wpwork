@@ -61,7 +61,7 @@ class categorybrands_productsView extends view {
     public function addToCart($post) {
 		// Ajax adding to cart
 		$this->assign('post', $post);
-		return dispatcher::applyFilters('prodActionButons', parent::getContent('addToCartBtn'), $post->ID);
+		return dispatcher::applyFilters('prodActionButons', parent::getContent('addToCartBtn'), $post->ID, $post);
         //$output = '<a href="'.uri::mod('user', '', 'addToCart', array('pid' => $post->ID)).'">'.lang::_('Add').'</a>';	//Old non-ajax way add to cart action
         //return $output;
     }

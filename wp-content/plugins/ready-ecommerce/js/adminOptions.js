@@ -6,7 +6,7 @@ var removeClicked = false;
 var notOnRowClicked = false;
 var toeAdminTabsLoaded = {};
 function toeLoadAdminOptTabContent(tabObj) {
-	var tabLink = jQuery(tabObj).find('a:first')
+	var tabLink = (tabObj && jQuery(tabObj).tagName() == 'A') ? jQuery(tabObj) : jQuery(tabObj).find('a:first')	// tabObj can be link ("a") or element, that contain link
 	,	module = jQuery(tabLink).attr('module')
 	,	view = jQuery(tabLink).attr('view')
 	,	contentIdSelector = jQuery(tabLink).attr('href')
@@ -33,7 +33,18 @@ function toeIsAdminOptTabLoaded(module, view) {
 	return false;
 }
 jQuery(function() {
+	// For version 3.4.1 or less WP use old jquery.tabs that have no action beforeActivate
+	if(TOE_DATA.wpVersionFloat && TOE_DATA.wpVersionFloat <= 3.4) {
     jQuery("#toe_opt_tabs").tabs({
+			select: function(event, ui) {
+				toeLoadAdminOptTabContent(ui.tab);
+			}
+		,	create: function(event, ui) {	// This was added for case when we go to tab dirrectly, by url
+				toeLoadAdminOptTabContent(ui.tab);
+			}
+		});
+	} else {
+		jQuery("#toe_opt_tabs").tabs({
 		beforeActivate: function(event, ui) {
 			toeLoadAdminOptTabContent(ui.newTab);
 		}
@@ -41,6 +52,7 @@ jQuery(function() {
 			toeLoadAdminOptTabContent(ui.tab);
 		}
 	});
+	}
     jQuery("#toe_opt_tabs").addClass('ui-tabs-vertical-right-side ui-helper-clearfix');
     jQuery("#toe_opt_tabs li").removeClass('ui-corner-top').addClass('ui-corner-right');
 	// Tab content width - in css it is 80%, but this can broke options page on some small screens.

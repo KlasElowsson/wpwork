@@ -99,8 +99,29 @@ class products extends module {
 		if(frame::_()->getModule('options')->get('show_subcategories_if_exist')) {
 			add_filter('term_link', array($this, 'setLinkToSubCategories'), 10, 3);
 		}
+		if(frame::_()->getModule('options')->get('show_qty_coming_soon')) {
+			dispatcher::addFilter('prodActionButons', array($this, 'setComingSoonInsteadBuy'), 5, 3);
+		}
         parent::init();
     }
+	public function setComingSoonInsteadBuy($content, $postId, $post = null) {
+		$qty = false;
+		if($post && is_object($post)) {
+			$qty = $post->quantity;
+		} else {
+			static $selectedPosts = array();
+			if(!isset($selectedPosts[ $postId ])) {
+				$selectedPosts[ $postId ] = $this->getProductsPost($postId);
+			}
+			if(isset($selectedPosts[ $postId ]) && is_object($selectedPosts[ $postId ])) {
+				$qty = $selectedPosts[ $postId ]->quantity;
+			}
+		}
+		if($qty === false || !empty($qty)) {	// No post were found for this product, or qty is not empty - return usual content, we can't do nothing else
+			return $content;
+		}
+		return $this->getController()->getView()->getComingSoonProductButtons( $selectedPosts[ $postId ] );		
+	}
 	public function setLinkToSubCategories($termlink, $term, $taxonomy) {
 		static $childrens = array();
 		if(in_array($taxonomy, array(self::CATEGORIES, self::BRANDS))) {

@@ -269,7 +269,7 @@ class modInstaller {
 			$newMessage .= lang::_('and enter your activation code.');
 			$currentMessages[ $plugName ] = $newMessage;
 			self::updateActivationMessages($currentMessages);
-			self::_addActivationModulesData($plugName, $modules);
+			self::_addActivationModulesData($plugName, $modules, $locations);
 		}
 	}
 	static public function checkModRequireActivation($code) {

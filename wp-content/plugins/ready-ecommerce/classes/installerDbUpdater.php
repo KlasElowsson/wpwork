@@ -105,6 +105,10 @@ class installerDbUpdater {
 				WHERE id = 6 LIMIT 1");
 		}
 	}
+	static public function update_0346() {
+		db::query("INSERT INTO `".S_WPDB_PREF.S_DB_PREF."options` VALUES
+		(NULL,'show_qty_coming_soon','0','Show Coming Soon message instead of Buy Now if QTY for product is 0 ','If checked - there will be no Buy now or Add to cart buttons for products, that have 0 QTY in stock.',4,NULL,4,0);");
+	}
 	static public function runUpdate() {
 		self::update_0312();
 		self::update_0313();
@@ -126,5 +130,6 @@ class installerDbUpdater {
 		self::update_0338();
 		self::update_0339();
 		self::update_0340();
+		self::update_0346();
 	}
 }

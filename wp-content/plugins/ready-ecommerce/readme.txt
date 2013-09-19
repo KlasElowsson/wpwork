@@ -2,8 +2,8 @@
 Contributors: readyshoppingcart.com
 Donate link: http://readyshoppingcart.com
 Tags: affiliate, cart, checkout, ecommerce, online, paypal, physical, reports, sagepay, moneybookers, sales, sell, shipping, shop, shopping, stock, store, tax, virtual, weights, widgets, wordpress ecommerce, commerce, e-commerce, reports, online shop, shopping, online store, authorize, cart, stock control, tax, wp e-commerce, 2checkout, 2co, coupons, gifts, ready!
-Tested up to: 3.6
-Stable tag: 0.3.4.5
+Tested up to: 3.6.1
+Stable tag: 0.3.4.6
 
 Shopping cart / E-commerce WP plugin. Easy to setup online store. Powerful functionality. Include free e-commerce themes.
 
@@ -12,7 +12,7 @@ Shopping cart / E-commerce WP plugin. Easy to setup online store. Powerful funct
 We're happy to present you Ready! e-commerce WordPress plugin with shopping cart and [WordPress E-commerce Themes](http://readyshoppingcart.com/products_categories/templates/ "WordPress E-commerce Themes") As Free themes as Professional. 
 Below you can find the list with main functions we would like to boast of.
 
-[Ready! E-commerce Wordpress Plugin](http://readyshoppingcart.com "E-commerce Wordpress Plugin") with Shopping Cart online store v0.3.4.5 include:
+[Ready! E-commerce Wordpress Plugin](http://readyshoppingcart.com "E-commerce Wordpress Plugin") with Shopping Cart online store v0.3.4.6 include:
 
 * [New Free Theme](http://readyshoppingcart.com/product/jeans-free-ecommerce-theme/ "Jeans Free Ecommerce Theme")
 * [Free Wordpress E-commerce Theme](http://readyshoppingcart.com/product/free-wordpress-e-commerce-theme/ "Free Wordpress E-commerce Theme")
@@ -97,6 +97,13 @@ Please [contact us](http://readyshoppingcart.com/contact "Contact Ecommerce Team
 5. [Jeans Free Theme](http://readyshoppingcart.com/product/jeans-free-ecommerce-theme/ "Jeans Free Ecommerce Theme")
 
 == Changelog ==
+ = 0.3.4.6 =
+ * Fix for some servers where they can't correct include php files without full path
+ * Coming soon option for products that have qty == 0
+ * Options tabs - compatibility with wordpress 3.4.1 
+ * Additional fields - small fix
+ * Minor plugin improvements
+
 = 0.3.4.5 =
  * Text and textarea static product fields data
  * Small fixes and improvements

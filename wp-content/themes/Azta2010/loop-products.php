@@ -43,86 +43,83 @@
 <?php get_post_custom(); ?>
 
 <?php
-$col_term = 'Färg ';
-$lcol_term = ' ';
+$var1 = "";
+$var2 = "";
+$var3 = "";
+//$col_term = 'Färg ';
+$lcol_term = '';
 $color_terms = wp_get_object_terms($post->ID, 'prod-col');
 if(!empty($color_terms)){
   if(!is_wp_error( $color_terms )){
     foreach($color_terms as $term){
-      $col_term .= ' | '.$term->name ;
+//      $col_term .= ' | '.$term->name ;
       $lcol_term .= ' | '.$term->name ;
     }
   }
 }
-$size_term = 'Storlek ';
-$lsize_term = ' ' ;
+//$size_term = 'Storlek ';
+$lsize_term = '' ;
 $size_terms = wp_get_object_terms($post->ID, 'prod-size');
 if(!empty($size_terms)){
   if(!is_wp_error( $size_terms )){
     foreach($size_terms as $term){
-      $size_term .= ' | '.$term->name ; 
+//      $size_term .= ' | '.$term->name ; 
       $lsize_term .= ' | '.$term->name ; 
     }
   }
 }
-$var1 = "Storlek | ".$lsize_term ;
-$var2 = "Färg | ".$lcol_term ;
-$var3 = "";
-
+if ($lsize_term != $var1) {
+$var1 = "Storlek ".$lsize_term ;
+}
+if ($lcol_term != $var2) {
+$var2 = "Färg ".$lcol_term ;
+}
 $price = get_post_meta($post->ID, "Pris", true);
 $shipping = 0;
 ?>
 
 
-<?php if ( get_post_meta($post->ID, "Pris", true)) : // If a user has filled out their description, show a bio on their entries  ?>
+<?php if ( get_post_meta($post->ID, "Pris", true)) : // If a user has filled out the price, show product  ?>
  
  <!-- Title with link if multi -->
       <div id="post-<?php the_ID(); ?>" <?php post_class("annons-fl"); ?>>
       <h2 class="entry-title"><a href="<?php the_permalink(); ?>" rel="bookmark"><?php the_title(); ?></a></h2>
 
-<!-- 
-        <div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
-          <h1 class="entry-title"><?php the_title(); ?></h1>
--->
-          <div class="entry-content">
-            <?php the_content(); ?>
-            <?php wp_link_pages( array( 'before' => '<div class="page-link">' . __( 'Pages:', 'twentyten' ), 'after' => '</div>' ) ); ?>
-          </div><!-- .entry-content -->
 
-          <div>
-           
-              <!--<ul class="post-meta">
-                <li>-->
-                  <div>
-                  <span class="post-meta-key">Pris: </span><?php echo get_post_meta($post->ID, "Pris", true); ?>
-                  </div>
-                <!--</li>
-                <li>..>-->
-                  <div>
-                  <span class="post-meta-key">Storlek: </span><?php echo $lsize_term; ?>
-                  </div>
-                <!--</li>
-                <li>-->
-                  <p>
-                  <span class="post-meta-key">Färg: </span><?php echo $lcol_term; ?>
-                  </p>
-                <!--</li>
-              </ul>-->
+      <div>
+      <span class="post-meta-key">Pris: </span><?php echo get_post_meta($post->ID, "Pris", true); ?>
+      </div>
             
-          </div>
-<?php else : ?>
-           Du måste ange ett pris för beräkningen  !!!! 
-<?php endif; ?>
-
 
 <?php 
 if ( has_post_thumbnail() ) { // check if the post has a Post Thumbnail assigned to it.
-  the_post_thumbnail();
+      the_post_thumbnail('medium');
 } 
 ?>
+<?php else : ?>
+           <strong>Du måste ange ett pris för beräkningen  !!!!</strong> 
+<?php endif; ?>
+          <?php if (strlen($var1) > 0) : ?>
+            <div>
+              <span class="post-meta-key">Storlek: </span><?php echo $lsize_term; ?>
+            </div>
+          <?php endif;  ?>
+          <?php if (strlen($var2) > 0) : ?>
+            <p>
+              <span class="post-meta-key">Färg: </span><?php echo $lcol_term; ?>
+            </p>
+          <?php endif;  ?>
+
+
+
+          <div class="entry-content">
+            <?php the_content(); ?>
+          </div><!-- .entry-content -->
+
+
 <div>
 <?php
-  $button_code = print_wp_cart_button_for_product(the_title(), $price, $shipping, $var1, $var2, $var3);
+  $button_code = print_wp_cart_button_for_product(the_title( "" ,"" , false), $price, $shipping, $var1, $var2, $var3);
   echo $button_code; ?>
 </div>
         </div><!-- #post-## -->

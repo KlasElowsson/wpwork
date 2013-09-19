@@ -16,11 +16,18 @@ Tags: two-columns, right-sidebar, custom-header, custom-colors, custom-backgroun
 .annons-fl {
 		float: left;
 		border-right-width: 5px;
-    padding: 0 5px;
+    padding: 5px;
+    width: 300px;
 }
-/*Lagt till för att ändra annonssidorna loop-category.php*/
+/*Lagt till för att ändra annonssidorna loop-category.php
 .annons {
-		width: 310px;
+		width: 300px;
+}
+*/
+#container {
+    float: left;
+    margin: 0 -240px 5px 0;
+    width: 100%;
 }
 #content h2.annons-title {
 		text-align: center;

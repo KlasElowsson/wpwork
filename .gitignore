@@ -8,6 +8,7 @@ wp-content/upgrade/
 wp-content/backup-db/
 wp-content/advanced-cache.php
 wp-content/wp-cache-config.php
+wp-content/plugins/types/
 sitemap.xml
 *.log
 wp-content/cache/
@@ -16,3 +17,4 @@ sitemap.xml.gz
 phpinfo.php
 readme.html
 readme.html
+wp-content/plugins/advanced-custom-fields/

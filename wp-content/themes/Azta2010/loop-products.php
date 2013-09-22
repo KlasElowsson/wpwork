@@ -76,6 +76,7 @@ $var2 = "Färg ".$lcol_term ;
 }
 $price = get_post_meta($post->ID, "Pris", true);
 $shipping = 0;
+$beskrivning = get_post_meta($post->ID, "beskr", true);
 ?>
 
 
@@ -105,19 +106,20 @@ if ( has_post_thumbnail() ) { // check if the post has a Post Thumbnail assigned
             </div>
           <?php endif;  ?>
           <?php if (strlen($var2) > 0) : ?>
-            <p>
+            <div>
               <span class="post-meta-key">Färg: </span><?php echo $lcol_term; ?>
-            </p>
+            </div>
           <?php endif;  ?>
 
 
 
           <div class="entry-content">
             <?php the_content(); ?>
+            <?php echo $beskrivning; ?>
           </div><!-- .entry-content -->
 
 
-<div>
+<div style="padding-top: 10px">
 <?php
   $button_code = print_wp_cart_button_for_product(the_title( "" ,"" , false), $price, $shipping, $var1, $var2, $var3);
   echo $button_code; ?>

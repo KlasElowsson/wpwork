@@ -49,7 +49,8 @@ Tags: two-columns, right-sidebar, custom-header, custom-colors, custom-backgroun
 .annons-grupp {
 		background-color: #FFFFFF;
 		margin: 1px;
-		float: left;	
+		float: left;
+		width: 100%;
 }
 .post-meta {
 		font-variant: small-caps; 
@@ -59,3 +60,25 @@ Tags: two-columns, right-sidebar, custom-header, custom-colors, custom-backgroun
 		color: green; 
 		font-weight: bold; 
 		font-size: 80%; }
+
+/*
+ * Navigering 
+ * */
+.navigation {
+    color: #002A80;
+    font-size: 18px;
+    line-height: 18px;
+    overflow: visible;
+}
+.nav-previous {
+    float: left;
+    width: 40%;
+    padding: 15px;
+    text-align: left;
+}
+.nav-next {
+    float: right;
+    width: 40%;
+    padding: 15px;
+    text-align: right;
+}

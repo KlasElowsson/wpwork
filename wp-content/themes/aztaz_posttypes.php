@@ -127,6 +127,117 @@ function aztaz_create_taxonomies()
   ));
   
   }
+// Produkter ska ingå i sökningen
+function search_filter($query) {
+  if ( !is_admin() && $query->is_main_query() ) {
+    if ($query->is_search) {
+      $query->set('post_type', array( 'post', 'products' ) );
+    }
+  }
+}
+
+add_action('pre_get_posts','search_filter');
+
+//Sortering för taxanomier i main query
+function prod_filter($query) {
+  if ( !is_admin() && $query->is_main_query() ) {
+    if ($query->is_tax) {
+//      $query->set('orderby', 'title');
+      $query->set('orderby', 'meta_value_num');
+      $query->set('meta_key', 'Pris');
+      $query->set('order', 'ASC');
+    }
+  }
+}
+
+add_action('pre_get_posts','prod_filter');
+
+//some Widgets
+//Widget for show taxonomies
+class Taxonomy_Widget_Klaselo extends WP_Widget {
+
+  public function __construct() {
+    // widget actual processes
+    parent::__construct(
+     'taxonomy_widget_klaselo', // Base ID
+      'Taxonomy Widget Klaselo', // Name
+      array( 'description' => 'A Widget to show one taxonomy with links', ) // Args
+    );
+  }
+
+  public function widget( $args, $instance ) {
+    // outputs the content of the widget
+    $title = apply_filters( 'widget_title', $instance['title'] );
+    $my_tax = $instance['my_tax'];
+
+    echo $args['before_widget'];
+    if ( ! empty( $title ) )
+      echo $args['before_title'] . $title . $args['after_title'];
+    else {
+      echo $args['before_title'] . "Taxonomy" . $args['after_title'];
+    }
+
+    $argstax = array( 'taxonomy' => $my_tax );
+    $terms = get_terms($my_tax, $argstax);
+    $count = count($terms); $i=0;
+    if ($count > 0) {
+        echo "<ul>";
+        foreach ($terms as $term) {
+          echo "<li>";
+          echo '<a href="'. get_term_link( $term ) . '" title="' . sprintf(__('View all post filed under %s', 'my_localization_domain'), $term->name) . '">' . $term->name . '</a>';
+          echo "</li>";
+        }
+        echo "</ul>";
+    }
+    echo $args['after_widget'];    
+  }
+
+  public function form( $instance ) {
+    
+    // outputs the options form on admin
+    if ( isset( $instance[ 'title' ] ) ) {
+      $title = $instance[ 'title' ];
+    }
+    else {
+      $title = __( 'Vadå titel', 'text_domain' );
+    }
+    if ( isset( $instance[ 'my_tax' ] ) ) {
+      $my_tax = $instance[ 'my_tax' ];
+    }
+    else {
+      $my_tax = 'prod-type';
+    }
+    
+    ?>
+    <p>
+    <label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:' ); ?></label> 
+    <input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>" />
+
+    <label for="<?php echo $this->get_field_id( 'my_tax' ); ?>"><?php _e( 'Taxonomy:' ); ?></label> 
+    <input class="widefat" id="<?php echo $this->get_field_id( 'my_tax' ); ?>" name="<?php echo $this->get_field_name( 'my_tax' ); ?>" type="text" value="<?php echo esc_attr( $my_tax ); ?>" />
+    </p>
+    <?php 
+    
+  }
+
+//  public function update( $new_instance, $old_instance ) {
+    // processes widget options to be saved
+//  }
+  Public function update( $new_instance, $old_instance ) {
+    $instance = $old_instance;
+
+    /* Strip tags (if needed) and update the widget settings. */
+    $instance['title'] = strip_tags( $new_instance['title'] );
+    $instance['my_tax'] = strip_tags( $new_instance['my_tax'] );
+
+    return $instance;
+  }
 
 
+}
+
+
+add_action( 'widgets_init', function(){
+     register_widget( 'Taxonomy_Widget_Klaselo' );
+});
 ?>

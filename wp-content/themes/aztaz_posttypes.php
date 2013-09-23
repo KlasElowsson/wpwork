@@ -142,9 +142,9 @@ add_action('pre_get_posts','search_filter');
 function prod_filter($query) {
   if ( !is_admin() && $query->is_main_query() ) {
     if ($query->is_tax) {
-//      $query->set('orderby', 'title');
-      $query->set('orderby', 'meta_value_num');
-      $query->set('meta_key', 'Pris');
+      $query->set('orderby', 'title');
+//      $query->set('orderby', 'meta_value_num');
+//      $query->set('meta_key', 'Pris');
       $query->set('order', 'ASC');
     }
   }

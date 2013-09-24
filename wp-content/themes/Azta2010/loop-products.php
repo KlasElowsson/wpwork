@@ -94,7 +94,16 @@ $beskrivning = get_post_meta($post->ID, "beskr", true);
 
 <?php 
 if ( has_post_thumbnail() ) { // check if the post has a Post Thumbnail assigned to it.
-      the_post_thumbnail('medium');
+$default_attr = array(
+      'class' => "attachment-medium",
+      'alt' => $beskrivning,
+      'title' => $beskrivning,
+    );
+      the_post_thumbnail('medium', $default_attr);
+      //'alt' => trim(strip_tags( $attachment->post_excerpt )),
+      //'title' => trim(strip_tags( $attachment->post_title )),
+      //      'src' => $src,
+      //      'class' => "attachment-$size",
 } 
 ?>
 <?php else : ?>

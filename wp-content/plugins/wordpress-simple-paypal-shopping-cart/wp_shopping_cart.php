@@ -1,11 +1,11 @@
 <?php
 /*
-Plugin Name: WP Simple Paypal Shopping cart
+Plugin Name: WP Simple Paypal Shopping cart variant
 Version: v3.8.7
 Plugin URI: http://www.tipsandtricks-hq.com/?p=768
-Author: Ruhul Amin
+Author: Ruhul Amin / Klas Elowsson 
 Author URI: http://www.tipsandtricks-hq.com/
-Description: Simple WordPress Shopping Cart Plugin, very easy to use and great for selling products and services from your blog!
+Description: Simple WordPress Shopping Cart Plugin, very easy to use and great for selling products and services from your blog! (Just for Swedish market Klas Elowsson)
 */
 
 if(!isset($_SESSION)){

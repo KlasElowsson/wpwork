@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: WP Simple Paypal Shopping cart
-Version: v3.8.6
+Version: v3.8.7
 Plugin URI: http://www.tipsandtricks-hq.com/?p=768
 Author: Ruhul Amin
 Author URI: http://www.tipsandtricks-hq.com/
@@ -12,7 +12,7 @@ if(!isset($_SESSION)){
     session_start();
 }	
 
-define('WP_CART_VERSION', '3.8.6');
+define('WP_CART_VERSION', '3.8.7');
 define('WP_CART_FOLDER', dirname(plugin_basename(__FILE__)));
 define('WP_CART_PATH',plugin_dir_path( __FILE__ ));
 define('WP_CART_URL', plugins_url('',__FILE__));
@@ -109,7 +109,7 @@ function wpspc_cart_actions_handler()
             $cookie_domain = str_replace("www","",$domain_url);    	
             setcookie("cart_in_use","true",time()+21600,"/",$cookie_domain);  //useful to not serve cached page when using with a caching plugin
 
-            //sanitize data
+            //sanitize data            
             if (isset($_POST['product'])) {
               $_POST['product'] = strip_tags($_POST['product']);//for PHP5.2 use filter_var($_POST['product'], FILTER_SANITIZE_STRING);
             }
@@ -233,7 +233,6 @@ function wpspc_cart_actions_handler()
         }
     }
 }
-
 function print_wp_shopping_cart()
 {
   $output ="";
@@ -318,8 +317,7 @@ function print_wp_shopping_cart()
         <tr>
         <th style="text-align: left">'.(__("Item Name", "WSPSC")).'</th><th>'.(__("Quantity", "WSPSC")).'</th><th>'.(__("Price", "WSPSC")).'</th><th></th>
         </tr>';
-    
-	    $item_total_shipping = 0.00;
+      $item_total_shipping = 0.00;
 	    foreach ($_SESSION['simpleCart'] as $item)
 	    {
 	        $total += $item['price'] * $item['quantity'];
@@ -656,11 +654,11 @@ function print_wp_cart_button_for_product($name, $price, $shipping=0, $var1='', 
 		}
         $replacement .= '<input type="hidden" name="product" value="'.$name.'" /><input type="hidden" name="price" value="'.$price.'" /><input type="hidden" name="shipping" value="'.$shipping.'" /><input type="hidden" name="addcart" value="1" /><input type="hidden" name="cartLink" value="'.cart_current_page_url().'" />';
         $replacement .= '<input type="hidden" name="product_tmp" value="'.$name.'" />';
- //       if($atts['file_url']){
- //           $file_url = $atts['file_url'];
- //           $file_url = base64_encode($file_url); 
- //           $replacement .= '<input type="hidden" name="file_url" value="'.$file_url.'" />';
- //       }
+//        if($atts['file_url']){
+//            $file_url = $atts['file_url'];
+//            $file_url = base64_encode($file_url); 
+//            $replacement .= '<input type="hidden" name="file_url" value="'.$file_url.'" />';
+//        }
 	$replacement .= '</form>';
         $replacement .= '</div>';
         return $replacement;
@@ -681,9 +679,7 @@ function cart_not_empty()
 
 function print_payment_currency($price, $symbol, $decimal)
 {
-
-    return number_format($price, 2, $decimal, ',').' '.$symbol;
-
+    return number_format($price, 2, $decimal, ',').' '.$symbol ;
 }
 
 function cart_current_page_url() {

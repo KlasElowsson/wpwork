@@ -23,7 +23,7 @@ function wpspc_create_orders_page()
             ),
 
             'public' => true,
-            'menu_position' => 80,
+            'menu_position' => 79,
             'supports' => false,
             'taxonomies' => array( '' ),
             'menu_icon' => WP_CART_URL.'/images/cart-orders-icon.png',

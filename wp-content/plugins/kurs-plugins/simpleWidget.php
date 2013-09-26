@@ -1,6 +1,6 @@
 <?php
 /*
-Plugin Name: Simple Widget
+Plugin Name: Kurs - Simple Widget
 Plugin URI: http://www.falkonproductions.com/simpleWidget/
 Description: This plugin does things you never thought were possible.
 Author: Drew Falkman

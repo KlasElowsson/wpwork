@@ -1,6 +1,6 @@
 <?php
 /*
-Plugin Name: Simple Dashboard Widget
+Plugin Name: Kurs - Simple Dashboard Widget
 Plugin URI: http://www.falkonproductions.com/simpleDBWidget/
 Description: This plugin adds a widget to the admin dashboard
 Author: Drew Falkman

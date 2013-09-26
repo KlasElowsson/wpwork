@@ -1,6 +1,6 @@
 <?php
 /*
-Plugin Name: Drew's Browser Detector Plugin
+Plugin Name: Kurs - Drew's Browser Detector Plugin
 Plugin URI: http://www.falkonproductions.com/browserDetector/
 Description: This plugin will store the user agents for later parsing and display
 Author: Drew Falkman
@@ -10,6 +10,9 @@ Author URI: http://www.falkonproductions.com/
 
 function bdetector_activate()
 {
+  /*
+   * Exempel hur man skapar en datatabell i wordpress
+   */
 	global $wpdb;
 	
 	$table_name = $wpdb->prefix . "bdetector";
@@ -39,6 +42,9 @@ function bdetector_insert_useragent()
 	$table_name = $wpdb->prefix . 'bdetector';
 	
 	$wpdb->insert($table_name,array('user_agent'=>$_SERVER['HTTP_USER_AGENT']),array('%s'));
-}
+  //$wpdb->insert_id    .. is the id you just inserted if you need it again 
+  // Den sista array "array('%s')" är en kontroll funktion så rätt saker matas in ... %s,%d,%f möjliga värden
+  // ytterligare säkerhet är ofta ett $wpdb->prepare statement vid select se func ref .. 
+} 
 
 add_action('wp_footer','bdetector_insert_useragent');

@@ -21,11 +21,6 @@
 
 <?php if ( have_posts() ) while ( have_posts() ) : the_post(); ?>
 
-
-
-
-  
-
 <?php if ($annons_cnt==0) : ?>
       <div class="annons-grupp">
 <?php elseif ($annons_cnt%2==0) : ?>

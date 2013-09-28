@@ -6,6 +6,8 @@
  * For example, puts together date-based pages if no date.php file exists.
  *
  * Learn more: http://codex.wordpress.org/Template_Hierarchy
+ * 
+ * Justerad för produkter 
  *
  * @package WordPress
  * @subpackage Twenty_Ten
@@ -29,15 +31,7 @@ get_header(); ?>
 ?>
 
 			<h1 class="page-title">
-<?php if ( is_day() ) : ?>
-				<?php printf( __( 'Daily Archives: <span>%s</span>', 'twentyten' ), get_the_date() ); ?>
-<?php elseif ( is_month() ) : ?>
-				<?php printf( __( 'Monthly Archives: <span>%s</span>', 'twentyten' ), get_the_date( _x( 'F Y', 'monthly archives date format', 'twentyten' ) ) ); ?>
-<?php elseif ( is_year() ) : ?>
-				<?php printf( __( 'Yearly Archives: <span>%s</span>', 'twentyten' ), get_the_date( _x( 'Y', 'yearly archives date format', 'twentyten' ) ) ); ?>
-<?php else : ?>
-				<?php _e( 'Blog Archives', 'twentyten' ); ?>
-<?php endif; ?>
+				<?php _e( 'Produkt sammanställning ( Bokstavsordning )', 'twentyten' ); ?>
 			</h1>
 
 <?php
@@ -51,7 +45,8 @@ get_header(); ?>
 	 * If you want to overload this in a child theme then include a file
 	 * called loop-archive.php and that will be used instead.
 	 */
-	 get_template_part( 'loop', 'archive' );
+//	 get_template_part( 'loop', 'archive' );
+   get_template_part( 'loop', 'aproducts' );
 ?>
 
 			</div><!-- #content -->

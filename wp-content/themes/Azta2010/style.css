@@ -9,6 +9,17 @@ Version: 0.0.1
 Template: twentyten
 Tags: two-columns, right-sidebar, custom-header, custom-colors, custom-background, custom-menu, theme-options, threaded-comments, sticky-post, translation-ready, microformats, rtl-language-support, editor-style
 */
+#content h1, #content h2, #content h3, #content h4, #content h5, #content h6 {
+    color: #000000;
+    line-height: 1.5em;
+    margin: 0 0 10px;
+}
+.page-title {
+    color: #000000;
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0 0 15px;
+}
 .hentry {
     margin: 0 0 0px;
 }
@@ -18,6 +29,12 @@ Tags: two-columns, right-sidebar, custom-header, custom-colors, custom-backgroun
 		border-right-width: 5px;
     padding: 5px;
     width: 300px;
+}
+/*Lagt till för att ändra annonssidorna loop-aproducts.php*/
+.annons-fl2 {
+		border-right-width: 5px;
+    padding: 5px;
+    width: 600px;
 }
 /*Lagt till för att ändra annonssidorna loop-category.php
 .annons {

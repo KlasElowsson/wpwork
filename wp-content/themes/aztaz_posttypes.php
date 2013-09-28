@@ -138,14 +138,20 @@ function search_filter($query) {
 
 add_action('pre_get_posts','search_filter');
 
-//Sortering för taxanomier i main query
+//Sortering för taxanomier och arkivlistor i main query
 function prod_filter($query) {
   if ( !is_admin() && $query->is_main_query() ) {
-    if ($query->is_tax) {
+    if ($query->is_tax || $query->is_archive) {
       $query->set('orderby', 'title');
 //      $query->set('orderby', 'meta_value_num');
 //      $query->set('meta_key', 'Pris');
       $query->set('order', 'ASC');
+    }
+    if ($query->is_archive) {
+      $query->set('posts_per_page', '50');
+    }
+    if ($query->is_tax) {
+      $query->set('posts_per_page', '10');
     }
   }
 }

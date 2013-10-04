@@ -117,10 +117,15 @@ function toeSwitchShippingModuleStatus(link) {
 <div class="tab_form">
     <form id="toeShippingModulesForm">
         <table wdith="100%">
-            <?php foreach($this->fields as $f) { if(in_array($f->getHtml(), array('hidden'))) continue;?>
+            <?php foreach($this->fields as $fKey => $f) { if(in_array($f->getHtml(), array('hidden'))) continue;?>
             <tr>
                 <td><?php lang::_e($f->label)?>: </td>
-                <td><?php $f->display()?></td>
+                <td>
+					<?php $f->display()?>
+					<?php if($fKey == 'code') { // Small promo - ?>
+						<a target="_blank" href="http://readyshoppingcart.com/products_categories/shipping/?ref=cust" id="" class="button button-primary button-large toeGreenButton"><?php lang::_e('Get more Shipping Methods!')?></a>
+					<?php }?>
+				</td>
             </tr>
             <?php }?>
             <tr>
@@ -133,7 +138,7 @@ function toeSwitchShippingModuleStatus(link) {
                     <?php echo html::hidden('page', array('value' => 'shipping'))?>
                     <?php echo html::hidden('action', array('value' => 'storeModule'))?>
                     <?php echo html::hidden('reqType', array('value' => 'ajax'))?>
-                    <?php echo html::submit('save', array('value' => lang::_('Save')))?>
+                    <?php echo html::submit('save', array('value' => lang::_('Save'), 'attrs' => 'class="button button-primary button-large"'))?>
                 </td>
             </tr>
         </table>
@@ -160,4 +165,4 @@ function toeSwitchShippingModuleStatus(link) {
         </tr>
     </table>
 </div>
-<div><?php echo html::button(array('attrs' => 'id="addShippingModule" class="button"', 'value' => lang::_('Add New Shipping module')))?></div>
+<div><?php echo html::button(array('attrs' => 'id="addShippingModule" class="button button-primary button-large"', 'value' => lang::_('Add New Shipping module')))?></div>

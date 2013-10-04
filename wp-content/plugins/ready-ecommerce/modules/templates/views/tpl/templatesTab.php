@@ -1,35 +1,19 @@
-<?php 
-    $tplPerRow = 2;
-?>
-<style type="text/css">
-    .toeTplOption {
-        padding: 15px;
-        width: 300px;
-    }
-    .toeTplOptionSelected {
-        border: 4px solid skyblue;
-    }
-    .toeTplPicturePrev {
-        max-width: 300px; 
-        max-height: auto;
-    }
-    .toeTplDeactivateLink {
-        display: none;
-        float: right;
-    }
-</style>
 <script type="text/javascript">
 // <!--
     jQuery(document).ready(function(){
         toeMarkSelectedTpl('<?php echo $this->default_theme?>');
-        jQuery('.toeTplActivateLink').click(function(){
-            toeUpdateTemplate( jQuery(this).attr('href') );
+        jQuery('.toeTplActivateButt').click(function(){
+			if(jQuery(this).hasClass('toeTplDeactivateButt')) {
+				toeUpdateTemplate('');
+			} else {
+				toeUpdateTemplate( jQuery(this).attr('href') );
+			}
             return false;
         });
-        jQuery('.toeTplDeactivateLink').click(function(){
-            toeUpdateTemplate('');
-            return false;
-        });
+		jQuery('.toeTplPromoButt').click(function(){
+			window.open( jQuery(this).attr('href') );
+			return false;
+		});
     });
     function toeUpdateTemplate(newValue) {
         jQuery(this).sendForm({
@@ -51,40 +35,29 @@
         });
     }
     function toeMarkSelectedTpl(tpl) {
-        jQuery('.toeTplOption').removeClass('toeTplOptionSelected');
-        jQuery('.toeTplDeactivateLink').hide();
-        var selectedBox = jQuery('a.toeTplActivateLink[href="'+ tpl+ '"]').parents('div.toeTplOption:first');
+        jQuery('.toeTplOption').removeClass('toeTplOptionSelected').find('.toeTplDeactivateButt').removeClass('toeTplDeactivateButt').val(toeLang('Activate'));
+        var selectedBox = jQuery('.toeTplActivateButt[href="'+ tpl+ '"]').addClass('toeTplDeactivateButt').val(toeLang('Deactivate')).parents('div.toeTplOption:first');
         jQuery(selectedBox).addClass('toeTplOptionSelected');
-        jQuery(selectedBox).find('.toeTplDeactivateLink:first').show();
     }
 // -->
 </script>
-<table>
-<?php 
-    $i = 0;
-    foreach($this->templates as $code => $t) {
-        if($i%$tplPerRow == 0) { 
-?>
-            <tr>
-<?php 
-        }
-?>
-                <td width="<?php echo ceil(100/$tplPerRow)?>%">
-                    <div class="toeTplOption">
-                        <b><?php echo $t->name?></b><br />
-                        <img class="toeTplPicturePrev" src="<?php echo $t->prevImg?>" /><br />
-                        <a href="<?php echo $code?>" class="toeTplActivateLink"><?php lang::_e('Activate')?></a>
-                        <a href="<?php echo $code?>" class="toeTplDeactivateLink"><?php lang::_e('Deactivate')?></a><br /><br />
-                        <div><?php echo $t->description?></div>
-                    </div>
-                </td>
-<?php
-        if($i%$tplPerRow == $tplPerRow-1) { 
-?>
-            </tr>
-<?php }
-        $i++;
-    }
-?>
-</table>
+<?php foreach($this->templates as $code => $t) { ?>
+	<div class="toeTplOption">
+		<center><b><?php echo $t->name?></b></center><br />
+		<?php $ingLinkProps = isset($t->isPromo) ? 'href="'. $t->href. '" target="_blank"' : 'href="#" onclick="toeUpdateTemplate(\''. $code. '\'); return false;"';?>
+		<a class="toeTplImgPrev" <?php echo $ingLinkProps?>>
+			<img class="toeTplPicturePrev" src="<?php echo $t->prevImg?>" />
+		</a>
+		<br />
+		<div style="height: 50px;"><?php echo $t->description?></div>
+		<div>
+			<?php if(isset($t->isPromo)) { ?>
+				<input type="button" href="<?php echo $t->href?>" class="button button-primary button-large toeTplPromoButt" value="<?php echo $t->buttVal?>" />
+			<?php } else { ?>
+				<input type="button" href="<?php echo $code?>" class="button button-primary button-large toeTplActivateButt" value="<?php lang::_e('Activate')?>" />
+			<?php }?>
+		</div>
+	</div>
+<?php } ?>
+<div style="clear: both;"></div>
 <div id="toeTplMsg"></div>

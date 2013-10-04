@@ -4,7 +4,7 @@
  * Plugin Name: Ready! Ecommerce
  * Plugin URI: http://readyshoppingcart.com/
  * Description: Shopping cart / E-commerce WP plugin. Easy to setup your own online shop. Powerfull functionality, no programming skill require. Include free themes.
- * Version: 0.3.4.6
+ * Version: 0.3.4.7
  * Author: readyshoppingcart.com
  * Author URI: http://readyshoppingcart.com
  * 

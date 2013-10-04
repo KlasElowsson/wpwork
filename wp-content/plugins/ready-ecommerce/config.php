@@ -45,7 +45,7 @@
 	define('S_VARIATION', 'variation');
     define('S_CURRENCY', 'currency');
     define('S_PLUGIN_INSTALLED', true);
-    define('S_VERSION', '0.3.4.6');
+    define('S_VERSION', '0.3.4.7');
     define('S_USER', 'user');
     
     define('S_TIM_PATH', plugin_dir_url(__FILE__).'modules/timthumb.php?src=');

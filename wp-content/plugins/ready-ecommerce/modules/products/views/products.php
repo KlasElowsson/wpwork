@@ -351,6 +351,11 @@ class productsView extends view {
 				if(!isset($result['category'][0]))
 					$result['category'][0] = '';
             }
+			if(!empty($result)) {
+				foreach($result as $catt => $r) {
+					$result[$catt]['thumb'] = $thumb;
+				}
+			}
             if(!$avoidReplacing)
                 $result = $this->_substituteProdImgSrc($result, $pid, $for, $thumb);
             $results[] = $result;

@@ -71,7 +71,7 @@ jQuery(document).ready(function(){
                     <a href="#" class="toeOptTip description" htmlTo="tip"></a>
                 </td>
                 <td class="type"></td>
-                <td align="center"><div><a href="#" class="active" onclick="toeSwitchModuleStatus(this); return false;"></a></div></td>
+                <td class="action" align="center"><div><a href="#" class="active" onclick="toeSwitchModuleStatus(this); return false;"></a></div></td>
             </tr>
         </table>
     </div>

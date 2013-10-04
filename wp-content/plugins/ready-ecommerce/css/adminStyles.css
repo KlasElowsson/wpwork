@@ -267,3 +267,64 @@ div.options .delete_option, .product_media .delete_media {
 #the-list .ui-sortable-helper {
 	border: 2px solid yellowgreen;
 }
+
+.toeTplOption{
+	position: relative;
+	float: left;
+	-webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box; 
+    box-sizing: border-box;
+	margin: 3px;
+	border: solid 1px #ccc;
+	-webkit-border-radius: 13px;
+	-moz-border-radius: 13px;
+	border-radius: 13px;
+	background: #f9f9f9;
+	padding: 10px;
+	width: 325px;
+	height: 390px;
+}
+.toeTplOption:hover{
+	-webkit-box-shadow: 0 0 17px rgba(50, 50, 50, 1);
+	-moz-box-shadow:    0 0 17px rgba(50, 50, 50, 1);
+	box-shadow:         0 0 17px rgba(50, 50, 50, 1);
+}
+.toeTplDeactivateButt, .toeTplDeactivateButt:hover {
+	background-color: #ff6666 !important;
+	background-image: linear-gradient(to bottom, #ff9999, #ff6666)  !important;
+	border-color: #ff6666 #ff6666 #cc0033  !important;
+}
+
+/*Don't allow to set width for success image'*/
+#toe_opt_tabs .toeSuccessMsg {
+	width: auto !important;
+}
+.toeTplPicturePrev {
+	max-width: 300px; 
+	max-height: auto;
+}
+.toeTplImgPrev {
+	border-style: solid;
+	border-width: 1px;
+	display: block;
+	height: 225px;
+	margin-bottom: 10px;
+	overflow: hidden;
+	width: 300px;
+}
+.toeTplImgPrev:hover, .toeTplImgPrev:active {
+	color: inherit !important;
+}
+.toeGreenButton {
+	background-image: -ms-linear-gradient(top, #3DFF8B 0%, #279B1F 100%) !important;
+	background-image: -moz-linear-gradient(top, #3DFF8B 0%, #279B1F 100%)  !important;
+	background-image: -o-linear-gradient(top, #3DFF8B 0%, #279B1F 100%) !important;
+	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #3DFF8B), color-stop(1, #279B1F)) !important;
+	background-image: -webkit-linear-gradient(top, #3DFF8B 0%, #279B1F 100%) !important;
+	background-image: linear-gradient(to bottom, #3DFF8B 0%, #279B1F 100%) !important;
+	border-color: #279B1F !important;
+	color: #000000 !important;
+}
+.toeGreenButton:hover {
+	color: #000000 !important;
+}

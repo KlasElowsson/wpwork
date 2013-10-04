@@ -4,7 +4,7 @@
  *
  * @package WordPress\Plugins\Debug Bar Constants
  * @since 1.2
- * @version 1.2
+ * @version 1.2.1.1
  *
  * @author Juliette Reinders Folmer
  *
@@ -12,35 +12,47 @@
  * @license http://creativecommons.org/licenses/GPL/2.0/ GNU General Public License, version 2
  */
 
-if( !class_exists( 'debug_bar_pretty_output' ) && class_exists( 'Debug_Bar_Panel' ) ) {
-	
-	class debug_bar_pretty_output {
-		
+if ( !class_exists( 'Debug_Bar_Pretty_Output' ) && class_exists( 'Debug_Bar_Panel' ) ) {
+	/**
+	 * Class Debug_Bar_Pretty_Output
+	 */
+	class Debug_Bar_Pretty_Output {
+
 		const CONTEXT = 'debug-bar-constants';
+
 
 		/**
 		 * A not-so-pretty method to show pretty output ;-)
+		 *
+		 * @param   mixed   $var        Variable to show
+		 * @param   string  $title      (optional) Variable title
+		 * @param   bool    $escape     (optional) Whether to character escape the textual output
+		 * @param   string  $space      (internal) Indentation spacing
+		 * @param   bool    $short      (internal) Short or normal annotation
+		 * @param   string  $context    (internal) Output context
 		 */
 		public static function output( $var, $title = '', $escape = false, $space = '', $short = false, $context = self::CONTEXT ) {
 
-			if( $space === '' ) { print '<div class="pr_var">'; }
+			if ( $space === '' ) {
+				print '<div class="pr_var">';
+			}
 			if ( !empty( $title ) ) {
 				print '<h4 style="clear: both;">' . ( $escape === true ? esc_html( $title ) : $title ) . "</h4>\n";
 			}
 
 			if ( is_array( $var ) ) {
 				print 'Array: <br />' . $space . '(<br />';
-				if( $short !== true ) {
+				if ( $short !== true ) {
 					$spacing = $space . '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
 				}
 				else {
 					$spacing = $space . '&nbsp;&nbsp;';
 				}
-				foreach( $var as $key => $value ) {
+				foreach ( $var as $key => $value ) {
 					print $spacing . '[' . ( $escape === true ? esc_html( $key ): $key );
-					if( $short !== true ) {
+					if ( $short !== true ) {
 						print  ' ';
-						switch( true ) {
+						switch ( true ) {
 							case ( is_string( $key ) ) :
 								print '<span style="color: #336600; background-color: transparent;"><b><i>(string)</i></b></span>';
 								break;
@@ -60,9 +72,9 @@ if( !class_exists( 'debug_bar_pretty_output' ) && class_exists( 'Debug_Bar_Panel
 				}
 				print $space . ')<br />';
 			}
-			elseif ( is_string( $var ) ) {
+			else if ( is_string( $var ) ) {
 				print '<span style="color: #336600; background-color: transparent;">';
-				if( $short !== true ) {
+				if ( $short !== true ) {
 					print '<b><i>string['
 						. strlen( $var )
 					. ']</i></b> : ';
@@ -71,9 +83,9 @@ if( !class_exists( 'debug_bar_pretty_output' ) && class_exists( 'Debug_Bar_Panel
 					. ( $escape === true ? str_replace( '  ', ' &nbsp;', esc_html( $var ) ) : str_replace( '  ', ' &nbsp;', $var ) )
 					. '&rsquo;</span><br />';
 			}
-			elseif ( is_bool( $var ) ) {
+			else if ( is_bool( $var ) ) {
 				print '<span style="color: #000099; background-color: transparent;">';
-				if( $short !== true ) {
+				if ( $short !== true ) {
 					print '<b><i>bool</i></b> : '
 						. $var
 						. ' ( = ';
@@ -83,54 +95,54 @@ if( !class_exists( 'debug_bar_pretty_output' ) && class_exists( 'Debug_Bar_Panel
 				}
 				print '<i>'
 					. ( ( $var === false ) ? '<span style="color: #FF0000; background-color: transparent;">false</span>' : ( ( $var === true ) ? '<span style="color: #336600; background-color: transparent;">true</span>' : __( 'undetermined', $context ) ) );
-				if( $short !== true ) {
+				if ( $short !== true ) {
 					print ' </i>)';
 				}
 				print '</span><br />';
 			}
-			elseif ( is_int( $var ) ) {
+			else if ( is_int( $var ) ) {
 				print '<span style="color: #FF0000; background-color: transparent;">';
-				if( $short !== true ) {
+				if ( $short !== true ) {
 					print '<b><i>int</i></b> : ';
 				}
 				print ( ( $var === 0 ) ? '<b>' . $var . '</b>' : $var )
 					. "</span><br />\n";
 			}
-			elseif ( is_float( $var ) ) {
+			else if ( is_float( $var ) ) {
 				print '<span style="color: #990033; background-color: transparent;">';
-				if( $short !== true ) {
+				if ( $short !== true ) {
 					print '<b><i>float</i></b> : ';
 				}
 				print $var
 					. '</span><br />';
 			}
-			elseif ( is_null( $var ) ) {
+			else if ( is_null( $var ) ) {
 				print '<span style="color: #666666; background-color: transparent;">';
-				if( $short !== true ) {
+				if ( $short !== true ) {
 					print '<b><i>';
 				}
 				print 'null';
-				if( $short !== true ) {
+				if ( $short !== true ) {
 					print '</i></b> : '
 					. $var
 					. ' ( = <i>NULL</i> )';
 				}
 				print '</span><br />';
 			}
-			elseif ( is_resource( $var ) ) {
+			else if ( is_resource( $var ) ) {
 				print '<span style="color: #666666; background-color: transparent;">';
-				if( $short !== true ) {
+				if ( $short !== true ) {
 					print '<b><i>resource</i></b> : ';
 				}
 				print $var;
-				if( $short !== true ) {
+				if ( $short !== true ) {
 					print ' ( = <i>RESOURCE</i> )';
 				}
 				print '</span><br />';
 			}
 			else if ( is_object( $var ) ) {
 				print 'object: <br />' . $space . '(<br />';
-				if( $short !== true ) {
+				if ( $short !== true ) {
 					$spacing = $space . '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
 				}
 				else {
@@ -140,31 +152,42 @@ if( !class_exists( 'debug_bar_pretty_output' ) && class_exists( 'Debug_Bar_Panel
 				print $space . ')<br /><br />';
 			}
 			else {
-				print __( 'I haven&#39;t got a clue what this is: ', $context ) . gettype( $var ) . '<br />';
+				print esc_html__( 'I haven\'t got a clue what this is: ', $context ) . gettype( $var ) . '<br />';
 			}
-			if( $space === '' ) { print "</div>"; }
+			if ( $space === '' ) {
+				print '</div>';
+			}
 		}
 
 
-
 		/**
+		 * Gather and print pretty output about objects
+		 *
 		 * @todo: get object properties to show the variable type on one line with the 'property'
-         * @todo: get scope of methods and properties
-         */
+		 * @todo: get scope of methods and properties
+		 *
+		 * @param   object  $obj        Object to show
+		 * @param   bool    $escape     (internal) Whether to character escape the textual output
+		 * @param   string  $space      (internal) Indentation spacing
+		 * @param   bool    $short      (internal) Short or normal annotation
+		 * @param   string  $context    (internal) Output context
+		 */
 		public static function object_info( $obj, $escape, $space, $short, $context = self::CONTEXT ) {
+
 			print $space . '<b><i>Class</i></b>: ' . get_class( $obj ) . ' (<br />';
-			if( $short !== true ) {
+			if ( $short !== true ) {
 				$spacing = $space . '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
 			}
 			else {
 				$spacing = $space . '&nbsp;&nbsp;';
 			}
 			$ov = get_object_vars( $obj );
-			foreach( $ov as $var => $val ) {
+			foreach ( $ov as $var => $val ) {
 				if ( is_array( $val ) ) {
 					print $spacing . '<b><i>property</i></b>: ' . $var . "<b><i> (array)</i></b>\n";
 					self::output( $val, '' , $escape, $spacing, $short, $context );
-				} else {
+				}
+				else {
 					print $spacing . '<b><i>property</i></b>: ' . $var . ' = ';
 					self::output( $val, '' , $escape, $spacing, $short, $context );
 				}
@@ -172,67 +195,77 @@ if( !class_exists( 'debug_bar_pretty_output' ) && class_exists( 'Debug_Bar_Panel
 			unset( $ov, $var, $val );
 		
 			$om = get_class_methods( $obj );
-			foreach( $om as $method ) {
+			foreach ( $om as $method ) {
 				print $spacing . '<b><i>method</i></b>: ' . $method . "<br />\n";
 			}
 			unset( $om );
 			print $space . ')<br /><br />';
 		}
 
+
 		/**
 		 * Helper Function specific to the Debug bar plugin
 		 * Outputs properties in a table and methods in an unordered list
+		 *
+		 * @param   object  $obj        Object for which to show the properties and methods
+		 * @param   string  $context    (internal) Output context
+		 * @param   bool    $is_sub     (internal) Toplevel or nested object
 		 */
 		public static function ooutput( $obj, $context = self::CONTEXT, $is_sub = false ) {
-	
-			$properties = get_object_vars( $obj );
-			$methods = get_class_methods( $obj );
 
-			if( $is_sub === false ) {
+			$properties = get_object_vars( $obj );
+			$methods    = get_class_methods( $obj );
+
+			if ( $is_sub === false ) {
 				echo '
 		<h2><span>' . esc_html__( 'Properties:', $context ) . '</span>' . count( $properties ) . '</h2>
 		<h2><span>' . esc_html__( 'Methods:', $context ) . '</span>' . count( $methods ) . '</h2>';
 			}
 
 			// Properties
-			if( is_array( $properties ) && count( $properties ) > 0 ) {
-
+			if ( is_array( $properties ) && !empty( $properties ) ) {
 				$h = ( $is_sub === false ? 'h3' : 'h4' );
 				echo '
 		<' . $h . '>' . esc_html__( 'Object Properties:', $context ) . '</' . $h . '>';
 
 				uksort( $properties, 'strnatcasecmp' );
-                self::render_table( $properties, __( 'Property', $context ), __( 'Value', $context ), $context, $context );
+				self::render_table( $properties, __( 'Property', $context ), __( 'Value', $context ), $context, $context );
 			}
 
 			// Methods
-			if( is_array( $methods ) && count( $methods ) > 0 ) {
-
+			if ( is_array( $methods ) && !empty( $methods ) ) {
 				echo '
 		<h3>' . esc_html__( 'Object Methods:', $context ) . '</h3>
 		<ul class="' . $context . '">';
 
-
 				uksort( $methods, 'strnatcasecmp' );
 
-				foreach( $methods as $method ) {
+				foreach ( $methods as $method ) {
 					echo '<li>' . $method . '()</li>';
 				}
 				unset( $method );
 				echo '</ul>';
 			}
-
-			unset( $properties, $methods );
 		}
 
+
+		/**
+		 * Render the table output
+		 *
+		 * @param   array           $array  Array to be shown in the table
+		 * @param   string          $col1   Label for the first table column
+		 * @param   string          $col2   Label for the second table column
+		 * @param   string|array    $class  One or more CSS classes to add to the table
+		 * @param   string          $context
+		 */
 		public static function render_table( $array, $col1, $col2, $class = null, $context = self::CONTEXT ) {
 
 			$classes = 'debug-bar-table';
-			if( !is_null( $class ) ) {
-				if( is_string( $class ) ) {
+			if ( isset( $class ) ) {
+				if ( is_string( $class ) && $class !== '' ) {
 					$classes .= ' ' . $class;
 				}
-				else if( is_array( $class ) && count( $class ) > 0 ) {
+				else if ( is_array( $class ) && !empty( $class ) ) {
 					$classes = $classes . ' ' . implode( ' ', $class );
 				}
 			}
@@ -244,6 +277,14 @@ if( !class_exists( 'debug_bar_pretty_output' ) && class_exists( 'Debug_Bar_Panel
 			self::render_table_end();
 		}
 
+
+		/**
+		 * Generate the table header
+		 *
+		 * @param   string          $col1   Label for the first table column
+		 * @param   string          $col2   Label for the second table column
+		 * @param   string|array    $class  One or more CSS classes to add to the table
+		 */
 		public static function render_table_start( $col1, $col2, $class = null ) {
 
 			echo '
@@ -257,15 +298,28 @@ if( !class_exists( 'debug_bar_pretty_output' ) && class_exists( 'Debug_Bar_Panel
 			<tbody>';
 		}
 
+
+		/**
+		 * Generate table rows
+		 * @param   array           $array  Array to be shown in the table
+		 * @param   string          $context
+		 */
 		public static function render_table_rows( $array, $context = self::CONTEXT ) {
 
-			foreach( $array as $key => $value ) {
+			foreach ( $array as $key => $value ) {
 				self::render_table_row( $key, $value, $context );
 			}
-			unset( $key, $value );
 		}
 
+
+		/**
+		 * Generate individual table row
+		 * @param   mixed   $key    Item key to use a row label
+		 * @param   mixed   $value  Value to show
+		 * @param   string  $context
+		 */
 		public static function render_table_row( $key, $value, $context = self::CONTEXT ) {
+
 			echo '
 			<tr>
 				<th>
@@ -273,40 +327,43 @@ if( !class_exists( 'debug_bar_pretty_output' ) && class_exists( 'Debug_Bar_Panel
 				</th>
 				<td>';
 
-            if( is_object( $value ) ) {
-                self::ooutput( $value, $context, true );
-            }
-            else {
-                self::output( $value, '', true, '', false, $context );
-            }
+			if ( is_object( $value ) ) {
+				self::ooutput( $value, $context, true );
+			}
+			else {
+				self::output( $value, '', true, '', false, $context );
+			}
 
-            echo '
+			echo '
 				</td>
 			</tr>';
 		}
 
+
+		/**
+		 * Generate table closing
+		 */
 		public static function render_table_end() {
+
 			echo '
 			</tbody>
 		</table>
 ';
 		}
-
-	} // End of class debug_bar_pretty_output
-
+	} // End of class Debug_Bar_Pretty_Output
 } // End of if class_exists wrapper
 
 
 
 
-if( !class_exists( 'debug_bar_list_php_classes' ) ) {
-
+if ( !class_exists( 'Debug_Bar_List_PHP_Classes' ) ) {
 	/**
 	 * This class does nothing, just a way to keep the list of php classes out of the global namespace
-	 * You can retrieve the list by using the static variable list_php_classes::$PHP_classes
+	 * You can retrieve the list by using the static variable Debug_Bar_List_PHP_Classes::$PHP_classes
+	 * List last updated: 2013-05-05
 	 */
-	class list_php_classes {
-		
+	class Debug_Bar_List_PHP_Classes {
+
 		public static $PHP_classes = array(
 
 			/* == "Core" == */
@@ -327,7 +384,7 @@ if( !class_exists( 'debug_bar_list_php_classes' ) ) {
 			'ErrorException',
 
 
-			/* == Affecting PHP's Behaviour == */
+			/* == Affecting PHPs Behaviour == */
 			// APC
 			'APCIterator',
 
@@ -395,7 +452,7 @@ if( !class_exists( 'debug_bar_list_php_classes' ) ) {
 					'MongoDB',
 					'MongoCollection',
 					'MongoCursor',
-					
+
 					// Mongo Types
 					'MongoId',
 					'MongoCode',
@@ -408,17 +465,17 @@ if( !class_exists( 'debug_bar_list_php_classes' ) ) {
 					'MongoMinKey',
 					'MongoMaxKey',
 					'MongoTimestamp',
-					
+
 					// Mongo GridFS Classes
 					'MongoGridFS',
 					'MongoGridFSFile',
 					'MongoGridFSCursor',
-					
+
 					// Mongo Miscellaneous
 					'MongoLog',
 					'MongoPool',
 					'Mongo',
-					
+
 					// Mongo Exceptions
 					'MongoException',
 					'MongoResultException',
@@ -440,7 +497,7 @@ if( !class_exists( 'debug_bar_list_php_classes' ) ) {
 					// mysqlnd_uh - Mysqlnd user handler plugin
 					'MysqlndUhConnection',
 					'MysqlndUhPreparedStatement',
-					
+
 				// OCI8 - Oracle OCI8
 				'OCI-Collection',
 				'OCI-Lob',
@@ -449,7 +506,7 @@ if( !class_exists( 'debug_bar_list_php_classes' ) ) {
 				'SQLiteDatabase',  // Not easy to find in PHP docs
 				'SQLiteResult',  // Not easy to find  in PHP docs
 				'SQLiteUnbuffered',  // Not easy to find  in PHP docs
-				'SQLiteException',  // Not easy to find  in PHP docs
+				'SQLiteException',	// Not easy to find  in PHP docs
 
 				// SQLite3
 				'SQLite3',
@@ -612,14 +669,14 @@ if( !class_exists( 'debug_bar_list_php_classes' ) ) {
 
 			// Judy - Judy Arrays
 			'Judy',
-			
+
 			// Lua
 			'Lua',
 			'LuaClosure',
 
 			// SPL - Standard PHP Library (SPL)
-			
-				// SPL Datastructures
+
+				// SPL Data structures
 				'SplDoublyLinkedList',
 				'SplStack',
 				'SplQueue',
@@ -629,7 +686,7 @@ if( !class_exists( 'debug_bar_list_php_classes' ) ) {
 				'SplPriorityQueue',
 				'SplFixedArray',
 				'SplObjectStorage',
-				
+
 				// SPL Iterators
 				'AppendIterator',
 				'ArrayIterator',
@@ -655,7 +712,7 @@ if( !class_exists( 'debug_bar_list_php_classes' ) ) {
 				'RecursiveRegexIterator',
 				'RecursiveTreeIterator',
 				'RegexIterator',
-				
+
 				'CachingRecursiveIterator', // Not in PHP docs - deprecated
 
 
@@ -666,7 +723,7 @@ if( !class_exists( 'debug_bar_list_php_classes' ) ) {
 				'SeekableIterator',
 				'SplObserver',
 				'SplSubject',
-				
+
 				// SPL Exceptions
 				'BadFunctionCallException',
 				'BadMethodCallException',
@@ -686,12 +743,12 @@ if( !class_exists( 'debug_bar_list_php_classes' ) ) {
 				'SplFileInfo',
 				'SplFileObject',
 				'SplTempFileObject',
-				
+
 				// SPL Miscellaneous Classes and Interfaces
 				'ArrayObject',
 				'SplObserver',
 				'SplSubject',
-				
+
 			// SPL Types - SPL Type Handling
 			'SplType',
 			'SplInt',
@@ -699,7 +756,7 @@ if( !class_exists( 'debug_bar_list_php_classes' ) ) {
 			'SplEnum',
 			'SplBool',
 			'SplString',
-			
+
 			// Streams
 			'php_user_filter',
 			'streamWrapper',
@@ -707,11 +764,11 @@ if( !class_exists( 'debug_bar_list_php_classes' ) ) {
 			// Tidy
 			'tidy',
 			'tidyNode',
-			
+
 			// V8js - V8 Javascript Engine Integration
 			'V8Js',
 			'V8JsException',
-			
+
 			// Yaf
 			'Yaf_Application',
 			'Yaf_Bootstrap_Abstract',
@@ -758,10 +815,10 @@ if( !class_exists( 'debug_bar_list_php_classes' ) ) {
 			'AMQPExchange',
 			'AMQPQueue',
 			'AMQPEnvelope',
-			
+
 			// chdb - Constant hash database
 			'chdb',
-			
+
 			// Event
 			'Event',
 			'EventBase',
@@ -775,14 +832,14 @@ if( !class_exists( 'debug_bar_list_php_classes' ) ) {
 			'EventListener',
 			'EventSslContext',
 			'EventUtil',
-			
+
 			// Gearman
 			'GearmanClient',
 			'GearmanJob',
 			'GearmanTask',
 			'GearmanWorker',
 			'GearmanException',
-			
+
 			// HTTP
 			'HttpDeflateStream',
 			'HttpInflateStream',
@@ -799,10 +856,10 @@ if( !class_exists( 'debug_bar_list_php_classes' ) ) {
 			'hw_api_error',
 			'hw_api_object',
 			'hw_api_reason',
-			
+
 			// Memcache
 			'Memcache',
-			
+
 			// Memcached
 			'Memcached',
 
@@ -810,24 +867,24 @@ if( !class_exists( 'debug_bar_list_php_classes' ) ) {
 			'RRDCreator',
 			'RRDGraph',
 			'RRDUpdater',
-			
+
 			// Simple Asynchronous Messaging
 			'SAMConnection',
 			'SAMMessage',
-			
+
 			// SNMP
 			'SNMP',
 			'SNMPException',
-			
+
 			// Stomp - Stomp Client
 			'Stomp',
 			'StompFrame',
 			'StompException',
-			
+
 			// SVM - Support Vector Machine
 			'SVM',
 			'SVMModel',
-			
+
 			// Varnish
 			'VarnishAdmin',
 			'VarnishStat',
@@ -854,10 +911,10 @@ if( !class_exists( 'debug_bar_list_php_classes' ) ) {
 			'SolrClientException',
 			'SolrIllegalArgumentException',
 			'SolrIllegalOperationException',
-			
+
 			// Sphinx - Sphinx Client
 			'SphinxClient',
-			
+
 			// Swish Indexing
 			'Swish',
 			'SwishResult',
@@ -871,7 +928,7 @@ if( !class_exists( 'debug_bar_list_php_classes' ) ) {
 			// Sessions - Session Handling
 			'SessionHandler',
 			'SessionHandlerInterface',
-	
+
 
 			/* == Text Processing == */
 
@@ -881,7 +938,7 @@ if( !class_exists( 'debug_bar_list_php_classes' ) ) {
 			'QuickHashIntHash',
 			'QuickHashStringIntHash',
 			'QuickHashIntStringHash',
-			
+
 			// Reflection
 			'Reflection',
 			'ReflectionClass',
@@ -902,7 +959,7 @@ if( !class_exists( 'debug_bar_list_php_classes' ) ) {
 			'OAuth',
 			'OAuthProvider',
 			'OAuthException',
-			
+
 			// SCA
 			'SCA',
 			'SCA_LocalProxy',
@@ -915,7 +972,7 @@ if( !class_exists( 'debug_bar_list_php_classes' ) ) {
 			'SoapHeader',
 			'SoapParam',
 			'SoapVar',
-			
+
 
 			/* == Windows Only Extensions == */
 
@@ -968,7 +1025,7 @@ if( !class_exists( 'debug_bar_list_php_classes' ) ) {
 
 			// libxml
 			'libXMLError',
-			
+
 			// Service Data Objects
 			'SDO_DAS_ChangeSummary',
 			'SDO_DAS_DataFactory',
@@ -982,10 +1039,10 @@ if( !class_exists( 'debug_bar_list_php_classes' ) ) {
 			'SDO_Model_ReflectionDataObject',
 			'SDO_Model_Type',
 			'SDO_Sequence',
-			
+
 			// SDO Relational Data Access Service
 			'SDO_DAS_Relational',
-			
+
 			// SDO XML Data Access Service
 			'SDO_DAS_XML',
 			'SDO_DAS_XML_Document',
@@ -1004,7 +1061,5 @@ if( !class_exists( 'debug_bar_list_php_classes' ) ) {
 			'XSLTProcessor',
 
 		);
-
-	} // End of class debug_bar_list_php_classes
-
+	} // End of class Debug_Bar_List_PHP_Classes
 } // End of if class_exists wrapper

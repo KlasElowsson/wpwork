@@ -30,7 +30,7 @@ class productsHelper extends helper {
     public function getCategoriesList($d = array()) {
         static $cOptions = array();;
         if(empty($cOptions)) {
-            $categories = frame::_()->getModule('products')->getCategories();
+            $categories = frame::_()->getModule('products')->getCategories($d);
             if(!empty($categories)) {
                 foreach($categories as $c) {
                     $cOptions[$c->term_taxonomy_id] = $c->cat_name;

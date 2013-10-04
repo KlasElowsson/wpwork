@@ -172,6 +172,10 @@ jQuery(document).ready(function(){
             return;
         }
         var id = jQuery(this).children('td:first').text();
+		if(!parseInt(id) && jQuery(this).find('.toeGetModButton').size()) {
+			window.open( jQuery(this).find('.toeGetModButton').attr('href') );
+			return;
+		}
 		toeShowModuleEditForm(id);
     });
     // add user field

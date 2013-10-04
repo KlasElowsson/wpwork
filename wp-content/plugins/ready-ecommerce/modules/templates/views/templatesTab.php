@@ -13,11 +13,10 @@ class templatesTabView extends view {
        if(empty($templates)) {
            $tpl = 'noTemplates';
        } else {
-           $this->assign('templates', $templates);
+           $this->assign('templates', dispatcher::applyFilters('templatesListToAdminTab', $templates));
            $this->assign('default_theme', frame::_()->getModule('options')->getModel()->get('default_theme'));
            $tpl = 'templatesTab';
        }
        return parent::getContent($tpl);
    }
 }
-?>

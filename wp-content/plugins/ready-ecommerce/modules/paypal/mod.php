@@ -42,6 +42,7 @@ class toecPaypal extends paymentModule {
         $parameters['state'] =  fieldAdapter::displayState($order['billing_address']['state'], 'code');
         $parameters['zip'] = $order['billing_address']['postcode'];
         $parameters['country'] = fieldAdapter::displayCountry($order['billing_address']['country'], 'iso_code_2');
+		$parameters['charset'] = 'utf-8';
 		if(!empty($order['products']) && is_array($order['products'])) {
 			$i = 1;
 			foreach($order['products'] as $p) {

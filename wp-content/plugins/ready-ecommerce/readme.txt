@@ -97,6 +97,12 @@ Please [contact us](http://readyshoppingcart.com/contact "Contact Ecommerce Team
 5. [Jeans Free Theme](http://readyshoppingcart.com/product/jeans-free-ecommerce-theme/ "Jeans Free Ecommerce Theme")
 
 == Changelog ==
+ = 0.3.4.7 =
+ * "Add New and Copy Data" button - products duplication fix
+ * Extrafields - small fix
+ * Links to PRO features
+ * Small code changes and improvements
+
  = 0.3.4.6 =
  * Fix for some servers where they can't correct include php files without full path
  * Coming soon option for products that have qty == 0

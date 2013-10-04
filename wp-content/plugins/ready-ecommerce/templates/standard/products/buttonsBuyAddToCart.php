@@ -10,6 +10,10 @@ jQuery(document).ready(function(){
         <form action="" method="post" class="toeAddToCartForm" id="toeAddToCartForm<?php echo $this->post->ID?>" onsubmit="toeAddToCart(this); return false;">
     <?php }?>
         <?php $textColor = $this->viewOptions['add_to_cart_text']; ?>
+		<div class="product_qty">
+            <?php lang::_e('Qty:'); ?>
+            <?php echo html::text('qty', array('value' => 1))?>
+        </div>
         <?php echo html::hidden('goto')?>
 		<?php echo html::hidden('addQty', array('value' => 1))?>
 		<?php echo html::hidden('mod', array('value' => 'user'))?>

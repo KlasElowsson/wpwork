@@ -434,52 +434,60 @@
 
 		public function addNewCopy() {
 			$pid = (int) req::getVar('post_id');
-
-			if(!is_numeric($pid))
-				return;
 			$res = new response();
-			$fields = frame::_()->getModule('products')->getController()->getModel('products')->get($pid);
-			$post_prev = get_post($pid);
-			$post = array(
-				'post_title' => $post_prev->post_title.' Copy',
-				'post_status' => 'publish',
-				'post_content' => $post_prev->post_content,
-				'post_excerpt' => $post_prev->post_excerpt,
-				'post_type' => 'product',
-				'post_author' => $post_prev->post_author,
-				'categories' => frame::_()->getModule('products')->getModel()->getCategories($pid)
-			);
-			foreach($fields as $f)
-			{
-			$post[$f->name] = $f->value;
+			
+			if($pid) {
+				$fields = frame::_()->getModule('products')->getController()->getModel('products')->get($pid);
+				$post_prev = get_post($pid);
+				$post = array(
+					'post_title' => $post_prev->post_title.' Copy',
+					'post_status' => 'publish',
+					'post_content' => $post_prev->post_content,
+					'post_excerpt' => $post_prev->post_excerpt,
+					'post_type' => 'product',
+					'post_author' => $post_prev->post_author,
+					'categories' => frame::_()->getModule('products')->getModel()->getCategories($pid)
+				);
+				foreach($fields as $f) {
+					if(in_array($f->name, array('post_id', 'ID', 'id'))) continue;	// Don't allow to copy post ID to new product
+					$post[$f->name] = $f->value;
+				}
+
+				$post_id = wp_insert_post( $post );
+
+				$productcategories = wp_get_object_terms($pid, 'products_categories');  
+				foreach($productcategories as $pc) {
+					wp_set_object_terms($post_id,$pc->name,'products_categories',true);
+				}
+
+				$products_brands = wp_get_object_terms($pid, 'products_brands');  
+				foreach($products_brands as $pb) {
+					wp_set_object_terms($post_id,$pb->name,'products_brands',true);
+				}
+
+				$post_tag = wp_get_object_terms($pid, 'post_tag');  
+				foreach($post_tag as $pt) {
+					wp_set_object_terms($post_id,$pt->name,'post_tag',true);
+				}
+				// Copy all images
+				$post_images = $this->getView()->getProductImages($pid);
+				if(!empty($post_images)) {
+					foreach($post_images as $img_by_types) {
+						if(!empty($img_by_types)) {
+							foreach($img_by_types as $img) {
+								if(isset($img['thumb']) && is_object($img['thumb'])) {
+									$img_post_data = (array) $img['thumb'];
+									$img_post_data['post_parent'] = $post_id;
+									wp_insert_post( $img_post_data );
+								}
+							}
+						}
+					}
+				}
+				$res->addData("copypost_id", $post_id);
+			} else {
+				$res->pushError(lang::_('Invalid product ID'));
 			}
-
-			$post_id = wp_insert_post( $post );
-
-			$productcategories = wp_get_object_terms($pid, 'products_categories');  
-			 foreach($productcategories as $pc)
-			{
-			wp_set_object_terms($post_id,$pc->name,'products_categories',true);
-			}
-
-
-			$products_brands = wp_get_object_terms($pid, 'products_brands');  
-			 foreach($products_brands as $pb)
-			{
-			wp_set_object_terms($post_id,$pb->name,'products_brands',true);
-			}
-
-
-			$post_tag = wp_get_object_terms($pid, 'post_tag');  
-			 foreach($post_tag as $pt)
-			{
-			wp_set_object_terms($post_id,$pt->name,'post_tag',true);
-			}
-
-
-			$res->addData("copypost_id",$post_id);
-
-
 			return $res->ajaxExec();
 		}
 

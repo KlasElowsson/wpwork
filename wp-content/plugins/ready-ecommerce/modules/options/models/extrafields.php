@@ -57,9 +57,35 @@ class extrafieldsModel extends model {
 				if(($isForCurrentParrent)&&(!empty($f['opt_val_id'])))
 					$skipFields[$f['id']] = true;
 			}
+			if(strpos($where, S_PRODUCT)) {
+				$categories = frame::_()->getModule('products')->getHelper()->getCategoriesList(array('pid' => $parent, 'orderByParents' => true));
+				if(!empty($categories) && is_array($categories)) {
+					foreach($categories as $cid => $name) {
+						if(!$name)
+							$categories[$cid] = '';	// As it can be NULL
+					}
+
+				} else {
+					$categories = array();
+				}
+			}
             foreach($fields as $f) {
-				if((int)$f['opt_parent_id'] && (int)$parent && (int)$parent !== (int)$f['opt_parent_id'])
+				if((int)$f['opt_parent_id'] && (int)$parent && (int)$parent !== (int)$f['opt_parent_id']) {	// We so close to continue - just check destination
+					$notForThisProduct = true;
+					if(isset($categories) && !empty($categories)) {
+						$destination = isset($f['destination']) && !empty($f['destination']) ? utils::jsonDecode($f['destination']) : array();
+						if(!empty($destination) && is_array($destination) && isset($destination['categories']) && !empty($destination['categories'])) {
+							foreach($destination['categories'] as $cid) {
+								if(isset($categories[ $cid ])) {
+									$notForThisProduct = false;
+									break;
+								}
+							}
+						}
+					}
+					if($notForThisProduct)
 					continue;
+				}
                 if(!isset($res[$f['id']]))
                     $res[$f['id']] = $f;
 				// Skip fields for other products and if not empty (LEFT JOIN).

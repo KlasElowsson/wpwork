@@ -270,7 +270,7 @@ class userModel extends model {
 	 */
 	private function _setAdditionalMetaFields($userId, $d = array()) {
 		if(isset($d['meta_fields']) && !empty($d['meta_fields']) && is_array($d['meta_fields'])) {
-			$availableMetaFields = array('toe_reg_for_tpl');
+			$availableMetaFields = array('toe_reg_for_tpl', 'toe_reg_for_affiliate');
 			foreach($availableMetaFields as $metaKey) {
 				if(isset($d['meta_fields'][$metaKey]) && !empty($d['meta_fields'][$metaKey])) {
 					add_user_meta($userId, $metaKey, $d['meta_fields'][$metaKey]);
